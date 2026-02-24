@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/Synapticxyz/aitrackr.io/compare/v0.1.0...v0.1.1) (2026-02-24)
+
+
+### Features
+
+* **i18n:** add multi-currency support with 45 currencies ([3554a65](https://github.com/Synapticxyz/aitrackr.io/commit/3554a65302713065d74a55a2c9bf95e89dd295dc))
+
 ## 0.1.0 (2026-02-24)
 
 
