@@ -17,7 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, DollarSign } from 'lucide-react'
-import { formatCurrency, formatDate, calculateCostPerHour } from '@/lib/utils'
+import { formatDate, calculateCostPerHour } from '@/lib/utils'
+import { formatMoney } from '@/lib/currencies'
 import type { Subscription } from '@prisma/client'
 
 const CATEGORIES = ['ALL', 'TEXT_GEN', 'IMAGE_GEN', 'CODE', 'VIDEO', 'AUDIO', 'RESEARCH', 'OTHER'] as const
@@ -194,7 +195,7 @@ export default function SubscriptionsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-end gap-1">
-                  <span className="text-2xl font-bold">{formatCurrency(Number(sub.cost))}</span>
+                  <span className="text-2xl font-bold">{formatMoney(Number(sub.cost), session?.user?.currency)}</span>
                   <span className="text-xs text-muted-foreground mb-1">
                     /{sub.billingCycle === 'YEARLY' ? 'year' : 'mo'}
                   </span>

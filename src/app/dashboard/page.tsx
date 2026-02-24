@@ -4,7 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { OverlapBanner } from '@/components/overlap-banner'
-import { formatCurrency, formatDuration, formatDate } from '@/lib/utils'
+import { formatDuration, formatDate } from '@/lib/utils'
+import { formatMoney } from '@/lib/currencies'
 import { DollarSign, Clock, AlertTriangle, Activity, Zap } from 'lucide-react'
 import { startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns'
 import { RealtimeTracker } from './_components/realtime-tracker'
@@ -79,6 +80,7 @@ export default async function DashboardPage() {
               type={alert.type}
               description={alert.description}
               potentialSavings={Number(alert.potentialSavings)}
+              currency={session.user.currency}
             />
           ))}
         </div>
@@ -92,7 +94,7 @@ export default async function DashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalMonthlySpend)}</div>
+            <div className="text-2xl font-bold">{formatMoney(totalMonthlySpend, session.user.currency)}</div>
             <p className="text-xs text-muted-foreground">{subscriptions.length} active subscriptions</p>
           </CardContent>
         </Card>

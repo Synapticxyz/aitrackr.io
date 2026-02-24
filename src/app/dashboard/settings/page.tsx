@@ -9,13 +9,16 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DeleteAccountModal } from '@/components/delete-account-modal'
 import { toast } from 'sonner'
 import { Download, ExternalLink, Sparkles } from 'lucide-react'
+import { CURRENCIES } from '@/lib/currencies'
 
 export default function SettingsPage() {
   const { data: session, update } = useSession()
   const [name, setName] = useState(session?.user?.name ?? '')
+  const [currency, setCurrency] = useState(session?.user?.currency ?? 'USD')
   const [renewalAlerts, setRenewalAlerts] = useState(true)
   const [marketing, setMarketing] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -24,6 +27,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (session?.user?.name) setName(session.user.name)
+    if (session?.user?.currency) setCurrency(session.user.currency)
   }, [session])
 
   async function saveProfile() {
@@ -32,7 +36,7 @@ export default function SettingsPage() {
       const res = await fetch('/api/user/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, emailPreferences: { renewalAlerts, marketing } }),
+        body: JSON.stringify({ name, currency, emailPreferences: { renewalAlerts, marketing } }),
       })
       if (res.ok) {
         await update()
@@ -90,6 +94,22 @@ export default function SettingsPage() {
           <div className="space-y-2">
             <Label>Email</Label>
             <Input value={session?.user?.email ?? ''} disabled className="opacity-70" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="currency">Display Currency</Label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger id="currency">
+                <SelectValue placeholder="Select currency" />
+              </SelectTrigger>
+              <SelectContent className="max-h-72">
+                {CURRENCIES.map((c) => (
+                  <SelectItem key={c.code} value={c.code}>
+                    {c.symbol} {c.code} — {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">All costs will be displayed in this currency</p>
           </div>
           <div className="space-y-3">
             <Label>Email Preferences</Label>

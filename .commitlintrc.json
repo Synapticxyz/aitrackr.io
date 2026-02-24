@@ -22,7 +22,8 @@
         "stripe",
         "cron",
         "tests",
-        "seo"
+        "seo",
+        "i18n"
       ]
     ],
     "subject-max-length": [2, "always", 100]

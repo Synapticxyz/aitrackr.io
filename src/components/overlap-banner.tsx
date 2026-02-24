@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { AlertTriangle, X, TrendingDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { formatCurrency } from '@/lib/utils'
+import { formatMoney } from '@/lib/currencies'
 import { toast } from 'sonner'
 
 interface OverlapBannerProps {
@@ -11,6 +11,7 @@ interface OverlapBannerProps {
   type: 'DUPLICATE_CAPABILITY' | 'UNUSED_SUBSCRIPTION' | 'WRONG_TIER'
   description: string
   potentialSavings: number
+  currency?: string
 }
 
 const typeConfig = {
@@ -34,7 +35,7 @@ const typeConfig = {
   },
 }
 
-export function OverlapBanner({ id, type, description, potentialSavings }: OverlapBannerProps) {
+export function OverlapBanner({ id, type, description, potentialSavings, currency = 'USD' }: OverlapBannerProps) {
   const [dismissed, setDismissed] = useState(false)
   const config = typeConfig[type]
   const Icon = config.icon
@@ -65,7 +66,7 @@ export function OverlapBanner({ id, type, description, potentialSavings }: Overl
         <p className="text-sm">{description}</p>
         {potentialSavings > 0 && (
           <p className="text-sm font-medium text-green-500 mt-1">
-            Potential savings: {formatCurrency(potentialSavings)}/month
+            Potential savings: {formatMoney(potentialSavings, currency)}/month
           </p>
         )}
       </div>

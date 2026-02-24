@@ -73,6 +73,7 @@ declare module 'next-auth' {
       image?: string | null
       subscriptionStatus: SubscriptionStatus
       timezone: string
+      currency: string
     }
   }
 
@@ -80,6 +81,7 @@ declare module 'next-auth' {
     id: string
     subscriptionStatus: SubscriptionStatus
     timezone: string
+    currency: string
     deletedAt?: Date | null
   }
 }

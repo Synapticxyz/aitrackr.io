@@ -50,6 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           image: user.image,
           subscriptionStatus: user.subscriptionStatus,
           timezone: user.timezone,
+          currency: user.currency,
         }
       },
     }),
@@ -85,18 +86,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id
         token.subscriptionStatus = (user as { subscriptionStatus: SubscriptionStatus }).subscriptionStatus ?? 'FREE'
         token.timezone = (user as { timezone: string }).timezone ?? 'UTC'
+        token.currency = (user as { currency: string }).currency ?? 'USD'
       }
 
       // Refresh subscription status from DB on each token refresh
       if (token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { subscriptionStatus: true, timezone: true, deletedAt: true },
+          select: { subscriptionStatus: true, timezone: true, currency: true, deletedAt: true },
         })
         if (dbUser?.deletedAt) return token // Will be blocked on next request
         if (dbUser) {
           token.subscriptionStatus = dbUser.subscriptionStatus
           token.timezone = dbUser.timezone
+          token.currency = dbUser.currency
         }
       }
 
@@ -107,6 +110,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string
         session.user.subscriptionStatus = token.subscriptionStatus as SubscriptionStatus
         session.user.timezone = token.timezone as string
+        session.user.currency = (token.currency as string) ?? 'USD'
       }
       return session
     },

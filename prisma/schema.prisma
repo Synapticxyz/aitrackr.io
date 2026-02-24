@@ -57,6 +57,7 @@ model User {
 
   // GDPR & Privacy
   timezone                  String   @default("UTC")
+  currency                  String   @default("USD")
   deletedAt                 DateTime? @map("deleted_at")
   dataExportRequestedAt     DateTime? @map("data_export_requested_at")
   emailPreferences          Json      @default("{\"marketing\": false, \"renewalAlerts\": true}") @map("email_preferences")

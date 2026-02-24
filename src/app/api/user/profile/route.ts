@@ -25,9 +25,10 @@ export async function PATCH(request: NextRequest) {
     data: {
       name: parsed.data.name,
       timezone: parsed.data.timezone,
+      currency: parsed.data.currency,
       emailPreferences: parsed.data.emailPreferences,
     },
-    select: { id: true, name: true, timezone: true, emailPreferences: true },
+    select: { id: true, name: true, timezone: true, currency: true, emailPreferences: true },
   })
 
   return NextResponse.json({ user })

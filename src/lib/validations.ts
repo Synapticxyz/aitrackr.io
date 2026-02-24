@@ -29,6 +29,7 @@ export const subscriptionUpdateSchema = subscriptionSchema.partial().extend({
 export const profileUpdateSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   timezone: z.string().min(1).max(100).optional(),
+  currency: z.string().length(3).optional(),
   emailPreferences: z
     .object({
       marketing: z.boolean(),

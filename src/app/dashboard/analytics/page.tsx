@@ -8,7 +8,7 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
-import { formatCurrency, formatDuration } from '@/lib/utils'
+import { formatDuration } from '@/lib/utils'
 import { Download } from 'lucide-react'
 
 const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#64748b']
