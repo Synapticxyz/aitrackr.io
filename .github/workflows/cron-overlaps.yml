@@ -1,0 +1,18 @@
+name: Cron — Refresh Overlap Analysis
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  overlaps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh overlaps
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.APP_URL }}/api/cron/overlap-refresh" \
+            | jq .

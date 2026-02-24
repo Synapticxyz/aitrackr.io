@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiTrackr</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      min-height: 200px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .logo {
+      width: 28px;
+      height: 28px;
+      background: #6366f1;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      color: white;
+    }
+    .title { font-weight: 600; }
+    .status-badge {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .status-badge.connected { background: #166534; color: #4ade80; }
+    .status-badge.disconnected { background: #7f1d1d; color: #f87171; }
+    .section { padding: 12px 16px; border-bottom: 1px solid #1e293b; }
+    .section-title { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .stat-label { color: #94a3b8; font-size: 12px; }
+    .stat-value { font-weight: 600; color: #e2e8f0; }
+    .api-key-section { padding: 12px 16px; }
+    .input-group { display: flex; gap: 8px; margin-top: 8px; }
+    input[type="text"] {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: #e2e8f0;
+      font-size: 12px;
+      outline: none;
+    }
+    input[type="text"]:focus { border-color: #6366f1; }
+    button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button:hover { background: #4f46e5; }
+    button.secondary {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+    }
+    button.secondary:hover { background: #334155; }
+    .footer { padding: 10px 16px; display: flex; gap: 8px; }
+    .footer button { flex: 1; }
+    .error-text { color: #f87171; font-size: 11px; margin-top: 4px; }
+    .success-text { color: #4ade80; font-size: 11px; margin-top: 4px; }
+    .pulse { display: inline-block; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">AT</div>
+    <span class="title">AiTrackr</span>
+    <span id="status-badge" class="status-badge disconnected">Disconnected</span>
+  </div>
+
+  <div id="stats-section" class="section" style="display:none">
+    <div class="section-title">Today&apos;s Usage <span class="pulse"></span></div>
+    <div id="today-stats"></div>
+  </div>
+
+  <div id="api-key-section" class="api-key-section">
+    <div class="section-title">API Key</div>
+    <p style="color:#94a3b8;font-size:12px">Get your API key from AiTrackr dashboard → Extension tab</p>
+    <div class="input-group">
+      <input type="text" id="api-key-input" placeholder="atk_..." />
+      <button id="connect-btn">Connect</button>
+    </div>
+    <div id="key-message"></div>
+  </div>
+
+  <div class="footer">
+    <button class="secondary" id="dashboard-btn">Open Dashboard</button>
+    <button class="secondary" id="disconnect-btn" style="display:none">Disconnect</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

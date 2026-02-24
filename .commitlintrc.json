@@ -1,0 +1,30 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "scaffold",
+        "db",
+        "auth",
+        "extension",
+        "api",
+        "ui",
+        "dashboard",
+        "pages",
+        "business",
+        "devops",
+        "docs",
+        "deps",
+        "config",
+        "email",
+        "stripe",
+        "cron",
+        "tests",
+        "seo"
+      ]
+    ],
+    "subject-max-length": [2, "always", 100]
+  }
+}
