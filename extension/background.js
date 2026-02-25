@@ -2,6 +2,7 @@
 // Privacy-first: tracks time on AI tools, never reads content
 
 const DEFAULT_API_BASE = 'https://aitrackr.xflashdev.com'
+const EXTENSION_VERSION = chrome.runtime.getManifest().version
 const QUEUE_KEY = 'usageQueue'
 const SYNC_ALARM = 'syncUsage'
 const IDLE_ALARM = 'idleCheck'
@@ -164,6 +165,7 @@ async function syncQueue() {
         headers: {
           'Content-Type': 'application/json',
           'X-API-Key': apiKey,
+          'X-Extension-Version': EXTENSION_VERSION,
         },
         body: JSON.stringify({
           tool: entry.tool,
@@ -204,7 +206,7 @@ async function updateTodayCache() {
   if (!apiKey) return
   try {
     const res = await fetch(`${apiBase}/api/usage/realtime`, {
-      headers: { 'X-API-Key': apiKey },
+      headers: { 'X-API-Key': apiKey, 'X-Extension-Version': EXTENSION_VERSION },
     })
     if (res.ok) {
       const data = await res.json()

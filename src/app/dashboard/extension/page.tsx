@@ -6,10 +6,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
-import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send, Download, FolderOpen } from 'lucide-react'
+import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send, Download, FolderOpen, Tag, AlertCircle } from 'lucide-react'
 
 interface ApiKeyData { hasApiKey: boolean; maskedKey: string | null; apiKeyCreatedAt: string | null }
 interface SuggestionForm { url: string; name: string; notes: string }
+interface VersionEntry { version: string; date: string; notes: string[] }
+interface VersionData { latestVersion: string; minVersion: string; changelog: VersionEntry[] }
 
 const inputCls = 'font-mono text-sm bg-black border-white/10 text-white placeholder:text-gray-600 focus-visible:ring-amber-500/50'
 
@@ -31,8 +33,10 @@ export default function ExtensionPage() {
   const [suggestion, setSuggestion] = useState<SuggestionForm>({ url: '', name: '', notes: '' })
   const [suggestionLoading, setSuggestionLoading] = useState(false)
   const [suggestionSent, setSuggestionSent] = useState(false)
+  const [versionData, setVersionData] = useState<VersionData | null>(null)
 
   async function loadApiKey() { const res = await fetch('/api/user/api-key'); if (res.ok) setApiKeyData(await res.json() as ApiKeyData) }
+  async function loadVersion() { const res = await fetch('/api/extension/version'); if (res.ok) setVersionData(await res.json() as VersionData) }
   async function generateKey() {
     setLoading(true)
     try { const res = await fetch('/api/user/api-key', { method: 'POST' }); if (res.ok) { const data = await res.json() as { apiKey: string }; setNewKey(data.apiKey); await loadApiKey(); toast.success('API key generated!') } }
@@ -50,7 +54,7 @@ export default function ExtensionPage() {
     } finally { setSuggestionLoading(false) }
   }
 
-  useEffect(() => { loadApiKey() }, [])
+  useEffect(() => { loadApiKey(); loadVersion() }, [])
 
   const steps = [
     { n: 1, title: 'INSTALL_EXTENSION', desc: 'Download and install the extension manually (see instructions below). Chrome Web Store listing coming soon.' },
@@ -191,6 +195,58 @@ export default function ExtensionPage() {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section label="VERSION_&amp;_CHANGELOG">
+        {versionData ? (
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Tag className="h-4 w-4 text-amber-500" />
+                <div>
+                  <p className="text-xs font-mono text-gray-500">LATEST_VERSION</p>
+                  <p className="text-lg font-mono font-bold text-white">v{versionData.latestVersion}</p>
+                </div>
+              </div>
+              <a
+                href="/extension/aitrackr-extension-v1.0.0.zip"
+                download
+                className="flex items-center gap-2 px-3 py-2 border border-amber-500/30 text-amber-500 text-xs font-mono hover:bg-amber-500/10 transition-all"
+              >
+                <Download className="h-3.5 w-3.5" />
+                DOWNLOAD_LATEST
+              </a>
+            </div>
+
+            <div className="flex items-start gap-2 p-3 border border-white/5 bg-white/[0.02]">
+              <AlertCircle className="h-3.5 w-3.5 text-gray-500 mt-0.5 flex-shrink-0" />
+              <p className="text-xs font-mono text-gray-500 leading-relaxed">
+                The extension popup shows an <span className="text-white">&quot;Update available&quot;</span> notice automatically when a new version is released. Re-download and reload to update.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {versionData.changelog.map((entry) => (
+                <div key={entry.version} className="border-l-2 border-amber-500/30 pl-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-xs font-mono font-bold text-white">v{entry.version}</span>
+                    <span className="text-xs font-mono text-gray-600">{entry.date}</span>
+                  </div>
+                  <ul className="space-y-1">
+                    {entry.notes.map((note, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-amber-500 text-xs mt-0.5">›</span>
+                        <span className="text-xs font-mono text-gray-400">{note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs font-mono text-gray-600">Loading...</p>
+        )}
       </Section>
 
       <Section label="SUGGEST_A_TOOL">
