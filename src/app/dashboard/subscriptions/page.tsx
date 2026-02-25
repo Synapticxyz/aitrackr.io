@@ -242,7 +242,7 @@ export default function SubscriptionsPage() {
                   <FormItem>
                     <FormLabel>Monthly Cost ($)</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.01" min="0" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                      <Input type="number" step="0.01" min="0" {...field} onChange={(e) => { const v = parseFloat(e.target.value); field.onChange(isNaN(v) ? '' : v) }} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
