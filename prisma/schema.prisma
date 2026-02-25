@@ -63,12 +63,13 @@ model User {
   emailPreferences          Json      @default("{\"marketing\": false, \"renewalAlerts\": true}") @map("email_preferences")
 
   // Relations
-  accounts      Account[]
-  sessions      Session[]
-  subscriptions Subscription[]
-  usageLogs     UsageLog[]
-  overlapAlerts OverlapAlert[]
-  auditLogs     AuditLog[]
+  accounts        Account[]
+  sessions        Session[]
+  subscriptions   Subscription[]
+  usageLogs       UsageLog[]
+  overlapAlerts   OverlapAlert[]
+  auditLogs       AuditLog[]
+  toolSuggestions ToolSuggestion[]
 
   @@map("users")
 }
@@ -151,6 +152,20 @@ model AuditLog {
 
   @@index([userId])
   @@map("audit_logs")
+}
+
+model ToolSuggestion {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  name      String?
+  url       String
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("tool_suggestions")
 }
 
 enum SubscriptionStatus {

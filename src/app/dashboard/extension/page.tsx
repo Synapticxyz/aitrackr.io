@@ -4,8 +4,11 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
-import { Copy, RefreshCw, ExternalLink, CheckCircle, Shield } from 'lucide-react'
+import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send } from 'lucide-react'
 
 interface ApiKeyData {
   hasApiKey: boolean
@@ -13,10 +16,19 @@ interface ApiKeyData {
   apiKeyCreatedAt: string | null
 }
 
+interface SuggestionForm {
+  url: string
+  name: string
+  notes: string
+}
+
 export default function ExtensionPage() {
   const [apiKeyData, setApiKeyData] = useState<ApiKeyData | null>(null)
   const [loading, setLoading] = useState(false)
   const [newKey, setNewKey] = useState<string | null>(null)
+  const [suggestion, setSuggestion] = useState<SuggestionForm>({ url: '', name: '', notes: '' })
+  const [suggestionLoading, setSuggestionLoading] = useState(false)
+  const [suggestionSent, setSuggestionSent] = useState(false)
 
   async function loadApiKey() {
     const res = await fetch('/api/user/api-key')
@@ -43,6 +55,36 @@ export default function ExtensionPage() {
     toast.success('Copied to clipboard')
   }
 
+  async function submitSuggestion(e: React.FormEvent) {
+    e.preventDefault()
+    if (!suggestion.url.trim()) {
+      toast.error('Please enter a tool URL')
+      return
+    }
+    setSuggestionLoading(true)
+    try {
+      const res = await fetch('/api/tool-suggestions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: suggestion.url.trim(),
+          name: suggestion.name.trim() || undefined,
+          notes: suggestion.notes.trim() || undefined,
+        }),
+      })
+      if (res.ok) {
+        setSuggestionSent(true)
+        setSuggestion({ url: '', name: '', notes: '' })
+        toast.success('Thanks! Your suggestion has been sent to our team.')
+      } else {
+        const data = await res.json() as { error?: string }
+        toast.error(data.error ?? 'Failed to submit suggestion')
+      }
+    } finally {
+      setSuggestionLoading(false)
+    }
+  }
+
   useEffect(() => { loadApiKey() }, [])
 
   const steps = [
@@ -56,7 +98,12 @@ export default function ExtensionPage() {
     { name: 'ChatGPT', url: 'chat.openai.com', status: 'Supported' },
     { name: 'Claude', url: 'claude.ai', status: 'Supported' },
     { name: 'Gemini', url: 'gemini.google.com', status: 'Supported' },
+    { name: 'Google AI Studio', url: 'aistudio.google.com', status: 'Supported' },
     { name: 'Perplexity', url: 'perplexity.ai', status: 'Supported' },
+    { name: 'Grok', url: 'grok.com', status: 'Supported' },
+    { name: 'Microsoft Copilot', url: 'copilot.microsoft.com', status: 'Supported' },
+    { name: 'Poe', url: 'poe.com', status: 'Supported' },
+    { name: 'Mistral', url: 'mistral.ai', status: 'Supported' },
     { name: 'Midjourney', url: 'midjourney.com', status: 'Supported' },
   ]
 
@@ -148,6 +195,9 @@ export default function ExtensionPage() {
       <Card>
         <CardHeader>
           <CardTitle>Supported AI Tools</CardTitle>
+          <CardDescription>
+            The extension automatically tracks your usage on these platforms.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -163,6 +213,76 @@ export default function ExtensionPage() {
               </div>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Lightbulb className="h-5 w-5 text-primary" />
+            <CardTitle>Suggest a Tool</CardTitle>
+          </div>
+          <CardDescription>
+            Don&apos;t see your AI tool listed? Let us know and we&apos;ll add support for it.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {suggestionSent ? (
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-green-500/10 text-green-700 dark:text-green-400">
+              <CheckCircle className="h-5 w-5 shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Suggestion received!</p>
+                <p className="text-xs opacity-80">Our team will review it and add support soon.</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="ml-auto"
+                onClick={() => setSuggestionSent(false)}
+              >
+                Suggest another
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={submitSuggestion} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="tool-url">
+                  Tool URL <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="tool-url"
+                  placeholder="e.g. app.example.ai"
+                  value={suggestion.url}
+                  onChange={(e) => setSuggestion((s) => ({ ...s, url: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tool-name">Tool Name</Label>
+                <Input
+                  id="tool-name"
+                  placeholder="e.g. ExampleAI"
+                  value={suggestion.name}
+                  onChange={(e) => setSuggestion((s) => ({ ...s, name: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tool-notes">Notes <span className="text-muted-foreground text-xs">(optional)</span></Label>
+                <Textarea
+                  id="tool-notes"
+                  placeholder="Any extra context — pricing tier, what you use it for, etc."
+                  className="resize-none"
+                  rows={3}
+                  value={suggestion.notes}
+                  onChange={(e) => setSuggestion((s) => ({ ...s, notes: e.target.value }))}
+                />
+              </div>
+              <Button type="submit" disabled={suggestionLoading} className="w-full sm:w-auto">
+                <Send className="h-4 w-4 mr-2" />
+                {suggestionLoading ? 'Sending...' : 'Send Suggestion'}
+              </Button>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>
