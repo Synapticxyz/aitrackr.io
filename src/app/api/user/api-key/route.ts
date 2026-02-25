@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { errors } from '@/lib/api-error'
+import { handleCorsOptions, withCors } from '@/lib/cors'
 import { v4 as uuidv4 } from 'uuid'
 
 export async function POST() {
@@ -29,7 +30,15 @@ export async function POST() {
   return NextResponse.json({ apiKey: newApiKey })
 }
 
-export async function GET(request: Request) {
+export async function OPTIONS(request: NextRequest) {
+  return handleCorsOptions(request) ?? new NextResponse(null, { status: 204 })
+}
+
+export async function GET(request: NextRequest) {
+  const corsOpts = handleCorsOptions(request)
+  if (corsOpts) return corsOpts
+  const origin = request.headers.get('origin')
+
   // Extension verification: validate via X-API-Key header
   const apiKeyHeader = request.headers.get('X-API-Key')
   if (apiKeyHeader) {
@@ -37,8 +46,8 @@ export async function GET(request: Request) {
       where: { apiKey: apiKeyHeader, deletedAt: null },
       select: { id: true },
     })
-    if (!user) return errors.unauthorized()
-    return NextResponse.json({ valid: true })
+    if (!user) return withCors(errors.unauthorized(), origin)
+    return withCors(NextResponse.json({ valid: true }), origin)
   }
 
   // Dashboard: validate via session
