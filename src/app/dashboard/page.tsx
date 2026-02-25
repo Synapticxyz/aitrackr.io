@@ -1,6 +1,6 @@
-import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import { getSession } from '@/lib/auth-cache'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { OverlapBanner } from '@/components/overlap-banner'
@@ -13,32 +13,42 @@ import { RealtimeTracker } from './_components/realtime-tracker'
 export const metadata = { title: 'Dashboard' }
 
 export default async function DashboardPage() {
-  const session = await auth()
+  const session = await getSession()
   if (!session?.user) redirect('/auth/signin')
 
   const userId = session.user.id
   const now = new Date()
 
-  const [subscriptions, alerts, monthlyUsage, todayUsage] = await Promise.all([
+  const [subscriptions, alerts, monthlyUsage, todayUsage, recentLogs] = await Promise.all([
     prisma.subscription.findMany({
       where: { userId, isDeleted: false, isActive: true },
+      select: { id: true, name: true, cost: true, billingCycle: true },
     }),
     prisma.overlapAlert.findMany({
       where: { userId, dismissed: false },
       orderBy: { createdAt: 'desc' },
       take: 3,
+      select: { id: true, type: true, description: true, potentialSavings: true },
     }),
     prisma.usageLog.findMany({
       where: {
         userId,
         date: { gte: startOfMonth(now), lte: endOfMonth(now) },
       },
+      select: { tool: true, durationSeconds: true },
     }),
     prisma.usageLog.findMany({
       where: {
         userId,
         date: { gte: startOfDay(now), lte: endOfDay(now) },
       },
+      select: { durationSeconds: true },
+    }),
+    prisma.usageLog.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 8,
+      select: { id: true, tool: true, feature: true, durationSeconds: true, date: true },
     }),
   ])
 
@@ -56,12 +66,6 @@ export default async function DashboardPage() {
   }, {})
 
   const topToolName = Object.entries(topTool).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
-
-  const recentLogs = await prisma.usageLog.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    take: 8,
-  })
 
   return (
     <div className="space-y-6">

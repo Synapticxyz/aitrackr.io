@@ -1,5 +1,17 @@
 import { prisma } from '@/lib/prisma'
-import type { Subscription, UsageLog } from '@prisma/client'
+
+type SubscriptionSlim = {
+  id: string
+  name: string
+  provider: string
+  cost: import('@prisma/client').Prisma.Decimal
+  features: import('@prisma/client').Prisma.JsonValue
+}
+
+type UsageLogSlim = {
+  tool: string
+  durationSeconds: number
+}
 
 interface OverlapResult {
   type: 'DUPLICATE_CAPABILITY' | 'UNUSED_SUBSCRIPTION' | 'WRONG_TIER'
@@ -12,14 +24,14 @@ export async function detectOverlaps(userId: string): Promise<OverlapResult[]> {
   const [subscriptions, recentUsage] = await Promise.all([
     prisma.subscription.findMany({
       where: { userId, isActive: true, isDeleted: false },
+      select: { id: true, name: true, provider: true, cost: true, features: true },
     }),
     prisma.usageLog.findMany({
       where: {
         userId,
-        date: {
-          gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-        },
+        date: { gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) },
       },
+      select: { tool: true, durationSeconds: true },
     }),
   ])
 
@@ -32,9 +44,9 @@ export async function detectOverlaps(userId: string): Promise<OverlapResult[]> {
   return results
 }
 
-function detectDuplicateCapabilities(subscriptions: Subscription[]): OverlapResult[] {
+function detectDuplicateCapabilities(subscriptions: SubscriptionSlim[]): OverlapResult[] {
   const results: OverlapResult[] = []
-  const featureMap = new Map<string, Subscription[]>()
+  const featureMap = new Map<string, SubscriptionSlim[]>()
 
   for (const sub of subscriptions) {
     const features = sub.features as string[]
@@ -51,7 +63,7 @@ function detectDuplicateCapabilities(subscriptions: Subscription[]): OverlapResu
     if (subs.length < 2) continue
 
     const key = subs
-      .map((s: { id: string }) => s.id)
+      .map((s) => s.id)
       .sort()
       .join(':')
     if (processed.has(key)) continue
@@ -73,8 +85,8 @@ function detectDuplicateCapabilities(subscriptions: Subscription[]): OverlapResu
 }
 
 function detectUnusedSubscriptions(
-  subscriptions: Subscription[],
-  recentUsage: UsageLog[]
+  subscriptions: SubscriptionSlim[],
+  recentUsage: UsageLogSlim[]
 ): OverlapResult[] {
   const usedTools = new Set(recentUsage.map((u) => u.tool.toLowerCase()))
 
@@ -93,8 +105,8 @@ function detectUnusedSubscriptions(
 }
 
 function detectWrongTier(
-  subscriptions: Subscription[],
-  recentUsage: UsageLog[]
+  subscriptions: SubscriptionSlim[],
+  recentUsage: UsageLogSlim[]
 ): OverlapResult[] {
   const results: OverlapResult[] = []
 

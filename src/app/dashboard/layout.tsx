@@ -1,11 +1,11 @@
-import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { Sidebar } from '@/components/sidebar'
 import { TopBar } from '@/components/top-bar'
 import { prisma } from '@/lib/prisma'
+import { getSession } from '@/lib/auth-cache'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth()
+  const session = await getSession()
   if (!session?.user) redirect('/auth/signin')
 
   const alertCount = await prisma.overlapAlert.count({

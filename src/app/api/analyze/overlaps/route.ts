@@ -3,14 +3,22 @@ import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { errors } from '@/lib/api-error'
 import { detectOverlaps, saveOverlapAlerts } from '@/lib/overlap-detector'
+import { unstable_cache, revalidateTag } from 'next/cache'
 import { z } from 'zod'
+
+function getCachedOverlaps(userId: string) {
+  return unstable_cache(
+    () => detectOverlaps(userId),
+    [`overlaps-${userId}`],
+    { revalidate: 300, tags: [`overlaps:${userId}`] }
+  )()
+}
 
 export async function GET() {
   const session = await auth()
   if (!session?.user) return errors.unauthorized()
 
-  // Run fresh detection
-  const overlaps = await detectOverlaps(session.user.id)
+  const overlaps = await getCachedOverlaps(session.user.id)
   await saveOverlapAlerts(session.user.id, overlaps)
 
   const alerts = await prisma.overlapAlert.findMany({
@@ -20,6 +28,7 @@ export async function GET() {
 
   return NextResponse.json({ alerts })
 }
+
 
 export async function POST(request: NextRequest) {
   const session = await auth()

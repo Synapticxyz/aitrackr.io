@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { subscriptionSchema, subscriptionUpdateSchema } from '@/lib/validations'
 import { errors } from '@/lib/api-error'
 import { generalRateLimit } from '@/lib/rate-limit'
+import { revalidateTag } from 'next/cache'
 
 const FREE_PLAN_LIMIT = 3
 
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
     },
   })
 
+  revalidateTag(`overlaps:${session.user.id}`)
   return NextResponse.json({ subscription }, { status: 201 })
 }
 
@@ -88,6 +90,7 @@ export async function PUT(request: NextRequest) {
     },
   })
 
+  revalidateTag(`overlaps:${session.user.id}`)
   return NextResponse.json({ subscription })
 }
 
@@ -109,5 +112,6 @@ export async function DELETE(request: NextRequest) {
     data: { isDeleted: true, isActive: false },
   })
 
+  revalidateTag(`overlaps:${session.user.id}`)
   return NextResponse.json({ success: true })
 }

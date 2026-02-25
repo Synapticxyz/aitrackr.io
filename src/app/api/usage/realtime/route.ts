@@ -9,31 +9,38 @@ export async function GET() {
   if (!session?.user) return errors.unauthorized()
 
   const today = new Date()
-  const logs = await prisma.usageLog.findMany({
-    where: {
-      userId: session.user.id,
-      date: {
-        gte: startOfDay(today),
-        lte: endOfDay(today),
-      },
-    },
-  })
+  const dateFilter = { gte: startOfDay(today), lte: endOfDay(today) }
+  const where = { userId: session.user.id, date: dateFilter }
 
-  const totalSeconds = logs.reduce((sum, l) => sum + l.durationSeconds, 0)
+  const [aggregate, byToolRows, sessionCountRows] = await Promise.all([
+    prisma.usageLog.aggregate({
+      where,
+      _sum: { durationSeconds: true },
+    }),
+    prisma.usageLog.groupBy({
+      by: ['tool'],
+      where,
+      _sum: { durationSeconds: true },
+      orderBy: { _sum: { durationSeconds: 'desc' } },
+    }),
+    prisma.usageLog.groupBy({
+      by: ['sessionId'],
+      where,
+    }),
+  ])
 
-  const byTool = logs.reduce<Record<string, number>>((acc, log) => {
-    acc[log.tool] = (acc[log.tool] ?? 0) + log.durationSeconds
-    return acc
-  }, {})
-
-  const topTool = Object.entries(byTool).sort((a, b) => b[1] - a[1])[0]
+  const totalSeconds = aggregate._sum.durationSeconds ?? 0
+  const byTool = Object.fromEntries(
+    byToolRows.map((r) => [r.tool, r._sum.durationSeconds ?? 0])
+  )
+  const topTool = byToolRows[0]?.tool ?? null
 
   return NextResponse.json({
     totalSeconds,
     totalMinutes: Math.round(totalSeconds / 60),
     byTool,
-    topTool: topTool ? topTool[0] : null,
-    sessionCount: new Set(logs.map((l) => l.sessionId)).size,
+    topTool,
+    sessionCount: sessionCountRows.length,
     updatedAt: new Date().toISOString(),
   })
 }

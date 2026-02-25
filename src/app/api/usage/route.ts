@@ -88,30 +88,41 @@ export async function GET(request: NextRequest) {
   const from = startOfDay(subDays(new Date(), days - 1))
   const to = endOfDay(new Date())
 
-  const logs = await prisma.usageLog.findMany({
-    where: {
-      userId: session.user.id,
-      date: { gte: from, lte: to },
-    },
-    orderBy: { date: 'desc' },
-  })
+  const dateFilter = { gte: from, lte: to }
 
   if (groupBy === 'tool') {
-    const grouped = logs.reduce<Record<string, number>>((acc, log) => {
-      acc[log.tool] = (acc[log.tool] ?? 0) + log.durationSeconds
-      return acc
-    }, {})
-    return NextResponse.json({ grouped, logs: logs.slice(0, 100) })
+    const rows = await prisma.usageLog.groupBy({
+      by: ['tool'],
+      where: { userId: session.user.id, date: dateFilter },
+      _sum: { durationSeconds: true },
+      orderBy: { _sum: { durationSeconds: 'desc' } },
+    })
+    const grouped = Object.fromEntries(
+      rows.map((r) => [r.tool, r._sum.durationSeconds ?? 0])
+    )
+    return NextResponse.json({ grouped })
   }
 
   if (groupBy === 'date') {
-    const grouped = logs.reduce<Record<string, number>>((acc, log) => {
-      const date = new Date(log.date).toISOString().split('T')[0]!
-      acc[date] = (acc[date] ?? 0) + log.durationSeconds
-      return acc
-    }, {})
-    return NextResponse.json({ grouped, logs: logs.slice(0, 100) })
+    const rows = await prisma.usageLog.groupBy({
+      by: ['date'],
+      where: { userId: session.user.id, date: dateFilter },
+      _sum: { durationSeconds: true },
+      orderBy: { date: 'asc' },
+    })
+    const grouped = Object.fromEntries(
+      rows.map((r) => [
+        new Date(r.date).toISOString().split('T')[0]!,
+        r._sum.durationSeconds ?? 0,
+      ])
+    )
+    return NextResponse.json({ grouped })
   }
 
+  const logs = await prisma.usageLog.findMany({
+    where: { userId: session.user.id, date: dateFilter },
+    orderBy: { date: 'desc' },
+    take: 100,
+  })
   return NextResponse.json({ logs })
 }
