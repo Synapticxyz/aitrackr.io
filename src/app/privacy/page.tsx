@@ -84,10 +84,9 @@ export default function PrivacyPage() {
               The data controller responsible for processing your personal data is:
             </p>
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
-              <p className="text-white font-bold">AiTrackr</p>
-              <p>Operating as a sole trader / startup</p>
-              {/* FILL IN before launch */}
-              <p className="text-amber-400">[ REGISTERED COMPANY NAME & ADDRESS — fill in before launch ]</p>
+              <p className="text-white font-bold">InteQ, Sašo Kranjec s.p.</p>
+              <p>Škofljica, Slovenia</p>
+              <p>VAT ID: SI18095216</p>
               <p>Email: <a href="mailto:privacy@aitrackr.io" className="text-amber-500 underline">privacy@aitrackr.io</a></p>
             </div>
             <p>

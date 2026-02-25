@@ -150,10 +150,10 @@ Search for `[ ` in `src/app/privacy/page.tsx` and `src/app/terms/page.tsx` to fi
 
 | Placeholder | File(s) | What to fill in |
 |---|---|---|
-| `[ REGISTERED COMPANY NAME & ADDRESS ]` | privacy, terms | Your legal entity name + street address |
-| `[ VAT NUMBER ]` | terms | EU VAT number, or remove line if not applicable |
-| `[ INSERT COUNTRY ]` | terms §14 | Country whose law governs the contract (e.g., Slovenia) |
-| DPA reference | privacy §8 | Already pre-filled with IP RS (Slovenia) — verify or replace |
+| Company name & address | privacy, terms | ✅ InteQ, Sašo Kranjec s.p. · Škofljica, Slovenia |
+| VAT ID | terms | ✅ SI18095216 |
+| Governing law | terms §14 | ✅ Slovenia |
+| DPA reference | privacy §8 | ✅ IP RS (Slovenian Information Commissioner) |
 
 ### Other blockers before launch
 - [ ] Replace `NEXTAUTH_SECRET` in `.env` with `openssl rand -base64 32`

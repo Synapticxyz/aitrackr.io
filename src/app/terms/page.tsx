@@ -55,10 +55,9 @@ export default function TermsPage() {
             <p>These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between:</p>
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
               <p className="text-white font-bold">Service Provider</p>
-              <p>AiTrackr</p>
-              {/* FILL IN before launch */}
-              <p className="text-amber-400">[ REGISTERED COMPANY NAME, ADDRESS, COUNTRY — fill in before launch ]</p>
-              <p>VAT/Tax number: <span className="text-amber-400">[ VAT NUMBER — fill in if applicable ]</span></p>
+              <p>InteQ, Sašo Kranjec s.p.</p>
+              <p>Škofljica, Slovenia</p>
+              <p>VAT ID: SI18095216</p>
               <p>Contact: <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a></p>
             </div>
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
@@ -306,7 +305,7 @@ export default function TermsPage() {
           {/* 14 — KEY EU section */}
           <Section id="governing-law" title="14. GOVERNING LAW &amp; DISPUTE RESOLUTION">
             <p>
-              These Terms are governed by the laws of <strong className="text-white">[ INSERT COUNTRY ]</strong>,
+              These Terms are governed by the laws of <strong className="text-white">Slovenia</strong>,
               without regard to its conflict-of-law principles.
             </p>
             <p>
