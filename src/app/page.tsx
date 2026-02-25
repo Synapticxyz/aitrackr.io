@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {
-  ArrowRight, Shield, Lock, MessageSquare, Image, Sparkles,
+  ArrowRight, Shield, Lock, MessageSquare, Zap, Sparkles,
   Clock, Copy, Calculator, Bell, FileText, Download, Activity, Scissors, Check,
   Server, Chrome,
 } from 'lucide-react'
@@ -28,7 +28,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-gray-400 text-lg mb-10 max-w-lg leading-relaxed border-l-2 border-gray-800 pl-6">
-                Automatic tracking for ChatGPT, Claude, Midjourney.
+                Automatic tracking for ChatGPT, Claude, Gemini.
                 Detect overlapping subscriptions. Stop bleeding money on unused tools.
               </p>
 
@@ -100,10 +100,10 @@ export default function HomePage() {
 
                       <div className="flex justify-between items-center py-2 border-b border-white/[0.07] border-l-2 border-l-amber-500 pl-4 -ml-4">
                         <span className="text-white flex items-center gap-2">
-                          <Image className="w-4 h-4" />
-                          Midjourney
+                          <Zap className="w-4 h-4" />
+                          Gemini Advanced
                         </span>
-                        <span className="text-gray-300">$30.00</span>
+                        <span className="text-gray-300">$20.00</span>
                         <span className="text-red-400">Low</span>
                         <span className="text-amber-500">[OVERLAP]</span>
                       </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
                     <div className="mt-6 pt-4 border-t border-white/10">
                       <div className="flex justify-between items-center">
                         <span className="text-gray-400">Potential Monthly Savings:</span>
-                        <span className="text-2xl font-bold text-amber-500">$45.00</span>
+                        <span className="text-2xl font-bold text-amber-500">$20.00</span>
                       </div>
                     </div>
                   </div>
@@ -178,7 +178,7 @@ export default function HomePage() {
               {
                 icon: Copy,
                 title: 'OVERLAP_DETECTION',
-                desc: 'Identifies redundant subscriptions. Paying for image generation in both ChatGPT and Midjourney? We\'ll flag it.',
+                desc: 'Identifies redundant subscriptions. Paying for ChatGPT and Gemini Advanced? We\'ll flag it.',
               },
               {
                 icon: Calculator,
