@@ -106,7 +106,7 @@ extension/               # Chrome Extension (Manifest V3)
 
 ### GDPR
 - User soft delete: set `deletedAt`, NOT `prisma.user.delete()`
-- Hard delete runs 30 days later via GitHub Actions cron → `/api/cron/cleanup`
+- Hard delete runs 30 days later via scheduled cron → `/api/cron/cleanup`
 - Always check `user.deletedAt` in signIn callback
 
 ### Git Commits
@@ -176,23 +176,9 @@ Hetzner VPS
 ├── app (3000) → Next.js standalone
 └── db (5432) → Postgres 15
 
-Push to main → GitHub Actions → SSH → scripts/deploy.sh
+Push to main → CI/CD → SSH → scripts/deploy.sh
 ```
 
-GitHub Actions secrets needed:
+CI/CD secrets needed (set in your deployment pipeline):
 - `HETZNER_HOST`, `HETZNER_USER`, `HETZNER_SSH_KEY`
 - `CRON_SECRET`, `APP_URL`
-
-## GitHub Setup
-
-SSH public key (add to github.com/settings/keys):
-```
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEIK67MZS0unH4K7AZqore8QQLWtFzOGwdblr3hG0iN saso.kranjec@gmail.com
-```
-
-Create remote:
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-gh auth login
-gh repo create Synapticxyz/aitrackr.io --private --source=. --remote=origin --push
-```

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {
-  ArrowRight, Github, Shield, Lock, MessageSquare, Image, Sparkles,
+  ArrowRight, Shield, Lock, MessageSquare, Image, Sparkles,
   Clock, Copy, Calculator, Bell, FileText, Download, Activity, Scissors, Check,
   Server, Chrome,
 } from 'lucide-react'
@@ -41,13 +41,11 @@ export default function HomePage() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <a
-                  href="https://github.com/Synapticxyz/aitrackr.io"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/auth/signup"
                   className="px-8 py-4 font-mono text-sm border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all flex items-center gap-3 text-white"
                 >
-                  <Github className="w-4 h-4" />
-                  VIEW_SOURCE
+                  SEE_PRICING
+                  <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
 
@@ -426,12 +424,10 @@ export default function HomePage() {
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
               <a
-                href="https://github.com/Synapticxyz/aitrackr.io"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:hello@aitrackr.io"
                 className="hover:text-white transition-colors"
               >
-                GitHub
+                Contact
               </a>
             </div>
           </div>
