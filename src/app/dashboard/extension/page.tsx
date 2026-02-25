@@ -72,6 +72,26 @@ export default function ExtensionPage() {
         <p className="text-sm font-mono text-gray-400">Set up automatic usage tracking</p>
       </div>
 
+      {/* Chrome Web Store notice */}
+      <div className="flex items-start gap-3 p-4 border border-white/10 bg-[#111111]">
+        <Download className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <p className="text-xs font-mono font-bold text-white mb-1">WHY_NO_CHROME_WEB_STORE?</p>
+          <p className="text-xs font-mono text-gray-400 leading-relaxed mb-3">
+            Google does not allow companies registered in Slovenia to open a Chrome Web Store developer account.
+            Until this changes, the extension is distributed directly from this site — same code, same privacy guarantees, just a manual install.
+          </p>
+          <a
+            href="/extension/aitrackr-extension-v1.0.0.zip"
+            download
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-black font-mono font-bold text-sm hover:brightness-110 transition-all"
+          >
+            <Download className="h-4 w-4" />
+            DOWNLOAD_EXTENSION_v1.0.0
+          </a>
+        </div>
+      </div>
+
       {/* Privacy notice */}
       <div className="flex items-start gap-3 p-4 border border-amber-500/20 bg-amber-500/5">
         <Shield className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -101,22 +121,6 @@ export default function ExtensionPage() {
 
       <Section label="MANUAL_INSTALL">
         <div className="space-y-5">
-          <div className="flex items-start gap-3 p-4 border border-white/10 bg-black">
-            <Download className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <p className="text-xs font-mono font-bold text-white mb-1">DOWNLOAD_EXTENSION</p>
-              <p className="text-xs font-mono text-gray-500 mb-3">Download the extension package, unzip it, then load it in Chrome.</p>
-              <a
-                href="/extension/aitrackr-extension-v1.0.0.zip"
-                download
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-black font-mono font-bold text-sm hover:brightness-110 transition-all"
-              >
-                <Download className="h-4 w-4" />
-                DOWNLOAD_v1.0.0.zip
-              </a>
-            </div>
-          </div>
-
           <div className="space-y-3">
             <p className="text-xs font-mono font-bold text-white">INSTALL_STEPS</p>
             {[
