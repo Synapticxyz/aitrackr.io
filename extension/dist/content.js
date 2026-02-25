@@ -97,6 +97,17 @@ const TOOL_CONFIGS = {
       'code': ['code', 'codestral'],
     },
   },
+  'kimi.com': {
+    modelSelectors: [
+      '[class*="model"] span',
+      'button[class*="ModelSwitch"] span',
+      '[data-testid*="model"] span',
+    ],
+    featureMap: {
+      'code':     ['code', 'k2'],
+      'research': ['deep research', 'search'],
+    },
+  },
 }
 
 const hostname = window.location.hostname.replace('www.', '')

@@ -16,6 +16,7 @@ const TOOLS = [
   { name: 'HuggingFace',    provider: 'HuggingFace' },
   { name: 'Replicate',      provider: 'Replicate' },
   { name: 'Cohere',         provider: 'Cohere' },
+  { name: 'Kimi',           provider: 'Moonshot AI' },
 ]
 
 const apiBaseInput = document.getElementById('api-base')

@@ -61,7 +61,7 @@ export default function ExtensionPage() {
 
   const supportedTools = [
     'ChatGPT', 'Claude', 'Gemini', 'Google AI Studio', 'Perplexity',
-    'Grok', 'Microsoft Copilot', 'Poe', 'Mistral', 'Midjourney',
+    'Grok', 'Microsoft Copilot', 'Poe', 'Mistral', 'Midjourney', 'Kimi',
   ]
 
   return (

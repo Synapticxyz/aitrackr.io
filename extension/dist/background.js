@@ -29,6 +29,7 @@ const TOOL_MAP = {
   'huggingface.co':         { tool: 'HuggingFace',   provider: 'HuggingFace', category: 'OTHER' },
   'replicate.com':          { tool: 'Replicate',     provider: 'Replicate',   category: 'OTHER' },
   'cohere.com':             { tool: 'Cohere',        provider: 'Cohere',      category: 'TEXT_GEN' },
+  'kimi.com':               { tool: 'Kimi',          provider: 'Moonshot AI', category: 'TEXT_GEN' },
 }
 
 function getToolFromUrl(url) {
@@ -315,7 +316,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 chrome.runtime.onInstalled.addListener(async () => {
   chrome.alarms.create(SYNC_ALARM, { periodInMinutes: SYNC_INTERVAL_MINUTES })
-  console.log('[AiTrackr] Installed. Tracking 17 AI tools. Sync every 5 min.')
+  console.log('[AiTrackr] Installed. Tracking 18 AI tools. Sync every 5 min.')
 })
 
 chrome.runtime.onStartup.addListener(async () => {

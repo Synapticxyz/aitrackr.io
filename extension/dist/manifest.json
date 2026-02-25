@@ -30,7 +30,8 @@
     "https://huggingface.co/*",
     "https://replicate.com/*",
     "https://cohere.com/*",
-    "https://mistral.ai/*"
+    "https://mistral.ai/*",
+    "https://kimi.com/*"
   ],
 
   "background": {
@@ -52,7 +53,8 @@
         "https://copilot.microsoft.com/*",
         "https://poe.com/*",
         "https://character.ai/*",
-        "https://mistral.ai/*"
+        "https://mistral.ai/*",
+        "https://kimi.com/*"
       ],
       "js": ["content.js"],
       "run_at": "document_idle"
