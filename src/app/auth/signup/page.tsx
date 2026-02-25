@@ -37,6 +37,7 @@ export default function SignUpPage() {
         toast.error(json.error ?? 'Sign up failed')
         return
       }
+      toast.success('Account created! Signing you in...')
       // Auto sign in after signup
       const result = await signIn('credentials', {
         email: data.email,
@@ -45,6 +46,9 @@ export default function SignUpPage() {
       })
       if (result?.ok) {
         router.push('/dashboard')
+      } else {
+        toast.error('Account created but sign-in failed. Please sign in manually.')
+        router.push('/auth/signin')
       }
     } finally {
       setLoading(false)
