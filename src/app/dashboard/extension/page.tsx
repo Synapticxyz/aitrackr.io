@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
-import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send } from 'lucide-react'
+import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send, Download, FolderOpen } from 'lucide-react'
 
 interface ApiKeyData { hasApiKey: boolean; maskedKey: string | null; apiKeyCreatedAt: string | null }
 interface SuggestionForm { url: string; name: string; notes: string }
@@ -53,7 +53,7 @@ export default function ExtensionPage() {
   useEffect(() => { loadApiKey() }, [])
 
   const steps = [
-    { n: 1, title: 'INSTALL_EXTENSION', desc: 'Get the AiTrackr Chrome Extension from the Chrome Web Store.' },
+    { n: 1, title: 'INSTALL_EXTENSION', desc: 'Download and install the extension manually (see instructions below). Chrome Web Store listing coming soon.' },
     { n: 2, title: 'GET_API_KEY', desc: 'Generate your API key below and copy it.' },
     { n: 3, title: 'CONNECT_EXTENSION', desc: 'Open the extension popup, paste your API key, and click Connect.' },
     { n: 4, title: 'START_TRACKING', desc: 'Visit ChatGPT, Claude, or any supported AI tool. Usage is tracked automatically.' },
@@ -96,6 +96,51 @@ export default function ExtensionPage() {
               </div>
             </div>
           ))}
+        </div>
+      </Section>
+
+      <Section label="MANUAL_INSTALL">
+        <div className="space-y-5">
+          <div className="flex items-start gap-3 p-4 border border-white/10 bg-black">
+            <Download className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-xs font-mono font-bold text-white mb-1">DOWNLOAD_EXTENSION</p>
+              <p className="text-xs font-mono text-gray-500 mb-3">Download the extension package, unzip it, then load it in Chrome.</p>
+              <a
+                href="/extension/aitrackr-extension-v1.0.0.zip"
+                download
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-black font-mono font-bold text-sm hover:brightness-110 transition-all"
+              >
+                <Download className="h-4 w-4" />
+                DOWNLOAD_v1.0.0.zip
+              </a>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <p className="text-xs font-mono font-bold text-white">INSTALL_STEPS</p>
+            {[
+              { n: 1, text: 'Download the .zip file above and unzip it to a permanent folder on your computer (e.g. Documents/aitrackr-extension)' },
+              { n: 2, text: 'Open Chrome and go to chrome://extensions in the address bar' },
+              { n: 3, text: 'Enable "Developer mode" using the toggle in the top-right corner' },
+              { n: 4, text: 'Click "Load unpacked" and select the unzipped folder' },
+              { n: 5, text: 'The AiTrackr icon will appear in your toolbar. Pin it for easy access.' },
+            ].map((step) => (
+              <div key={step.n} className="flex gap-3">
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center border border-amber-500/50 text-amber-500 text-xs font-bold font-mono">
+                  {step.n}
+                </div>
+                <p className="text-xs font-mono text-gray-400 leading-relaxed">{step.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-start gap-3 p-3 border border-white/5 bg-white/[0.02]">
+            <FolderOpen className="h-3.5 w-3.5 text-gray-500 mt-0.5 flex-shrink-0" />
+            <p className="text-xs font-mono text-gray-600">
+              <span className="text-gray-400">NOTE:</span> Do not delete the unzipped folder — Chrome loads the extension from it on every startup. Chrome Web Store version coming soon.
+            </p>
+          </div>
         </div>
       </Section>
 
