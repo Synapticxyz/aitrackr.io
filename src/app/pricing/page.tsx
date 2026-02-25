@@ -92,11 +92,11 @@ export default function PricingPage() {
               </ul>
               <div className="space-y-2">
                 <CheckoutButton
-                  priceId={process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY ?? ''}
+                  priceId={process.env.STRIPE_PRICE_ID_MONTHLY ?? ''}
                   label="Subscribe Monthly — $8/mo"
                 />
                 <CheckoutButton
-                  priceId={process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY ?? ''}
+                  priceId={process.env.STRIPE_PRICE_ID_YEARLY ?? ''}
                   label="Subscribe Yearly — $79/yr"
                   variant="outline"
                 />
