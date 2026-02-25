@@ -12,12 +12,12 @@
     }
     .header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
     .logo {
-      width: 36px; height: 36px; background: #6366f1; border-radius: 8px;
+      width: 36px; height: 36px; background: #F59E0B; border-radius: 0px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 12px; color: white;
+      font-weight: 700; font-size: 12px; color: black; font-family: monospace;
     }
     h1 { font-size: 20px; font-weight: 700; }
-    h1 span { color: #6366f1; }
+    h1 span { color: #F59E0B; font-family: monospace; }
     .subtitle { font-size: 12px; color: #475569; margin-top: 2px; }
     .card {
       background: #1e293b; border-radius: 10px;
@@ -35,15 +35,15 @@
       border-radius: 6px; padding: 8px 12px; color: #e2e8f0;
       font-size: 13px; outline: none; font-family: monospace;
     }
-    input:focus { border-color: #6366f1; }
+    input:focus { border-color: #F59E0B; }
     .hint { font-size: 11px; color: #475569; margin-top: 5px; }
     .btn-row { display: flex; gap: 8px; margin-top: 14px; }
     .btn {
-      background: #6366f1; color: white; border: none;
+      background: #F59E0B; color: black; border: none;
       border-radius: 6px; padding: 8px 20px; font-size: 13px;
       font-weight: 500; cursor: pointer; transition: background 0.15s;
     }
-    .btn:hover { background: #4f46e5; }
+    .btn:hover { background: #D97706; }
     .btn-ghost {
       background: transparent; color: #94a3b8;
       border: 1px solid #334155;
@@ -85,8 +85,8 @@
     <div class="card-header">🔗 Server Connection</div>
     <div class="card-body">
       <label for="api-base">AiTrackr Server URL</label>
-      <input type="url" id="api-base" placeholder="https://aitrackr.xflashdev.com" />
-      <p class="hint">Default: https://aitrackr.xflashdev.com — only change for self-hosted instances</p>
+      <input type="url" id="api-base" placeholder="https://aitrackr.io" />
+      <p class="hint">Default: https://aitrackr.io — only change for self-hosted instances</p>
 
       <div class="btn-row">
         <button class="btn" id="save-btn">Save Settings</button>

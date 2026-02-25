@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE = 'https://aitrackr.xflashdev.com'
+const DEFAULT_API_BASE = 'https://aitrackr.io'
 
 const TOOLS = [
   { name: 'ChatGPT',        provider: 'OpenAI' },
