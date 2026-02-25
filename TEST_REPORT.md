@@ -192,7 +192,7 @@ The authentication system is failing due to a NextAuth configuration issue on th
 - ✅ Complete terms of service renders correctly
 - ✅ All 8 sections display properly
 - ✅ Back to home link works
-- ✅ Contact email (hello@aitrackr.io) displays correctly
+- ✅ Contact email (info@aitrackr.io) displays correctly
 
 ---
 

@@ -424,7 +424,7 @@ export default function HomePage() {
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
               <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
               <a
-                href="mailto:hello@aitrackr.io"
+                href="mailto:info@aitrackr.io"
                 className="hover:text-white transition-colors"
               >
                 Contact

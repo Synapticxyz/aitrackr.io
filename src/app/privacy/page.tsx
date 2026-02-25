@@ -363,7 +363,7 @@ export default function PrivacyPage() {
             <div className="border border-white/10 bg-[#111111] p-4 text-xs font-mono space-y-1">
               <p className="text-white font-bold">Privacy &amp; Data Protection Enquiries</p>
               <p>Email: <a href="mailto:privacy@aitrackr.io" className="text-amber-500 underline">privacy@aitrackr.io</a></p>
-              <p>General: <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a></p>
+              <p>General: <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a></p>
               <p className="text-gray-500 mt-2">We aim to respond within 48 hours and resolve all requests within 30 days.</p>
             </div>
           </Section>

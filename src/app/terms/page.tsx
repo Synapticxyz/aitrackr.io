@@ -58,7 +58,7 @@ export default function TermsPage() {
               <p>InteQ, Sašo Kranjec s.p.</p>
               <p>Škofljica, Slovenia</p>
               <p>VAT ID: SI18095216</p>
-              <p>Contact: <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a></p>
+              <p>Contact: <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a></p>
             </div>
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
               <p className="text-white font-bold">User / Customer (&quot;you&quot;)</p>
@@ -111,7 +111,7 @@ export default function TermsPage() {
             <ul className="list-disc list-outside ml-4 space-y-1">
               <li>Provide accurate, complete, and current registration information</li>
               <li>Maintain the security of your password and not share your account</li>
-              <li>Promptly notify us of any unauthorised access at <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a></li>
+              <li>Promptly notify us of any unauthorised access at <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a></li>
               <li>Maintain only one account per person (duplicate accounts may be suspended)</li>
             </ul>
             <p>
@@ -172,13 +172,13 @@ export default function TermsPage() {
             </p>
             <p>
               <strong className="text-white">How to withdraw:</strong> Send an unambiguous statement to{' '}
-              <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a>{' '}
+              <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a>{' '}
               or use the model withdrawal form below. We will confirm receipt within 48 hours and process your
               refund within 14 days via the original payment method.
             </p>
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
               <p className="text-white font-bold">MODEL WITHDRAWAL FORM (Art. 11(1) Annex I, Part B)</p>
-              <p className="text-gray-500 mt-2 italic">To: AiTrackr, hello@aitrackr.io</p>
+              <p className="text-gray-500 mt-2 italic">To: AiTrackr, info@aitrackr.io</p>
               <p className="text-gray-500 italic">I hereby give notice that I withdraw from my contract for the purchase of the following service:</p>
               <p className="text-gray-500 italic">[ Pro plan — Monthly / Annual ]</p>
               <p className="text-gray-500 italic">Ordered on: [ date ]</p>
@@ -321,7 +321,7 @@ export default function TermsPage() {
                 https://ec.europa.eu/consumers/odr
               </a>
               <p className="text-gray-400 mt-1">
-                Our email for ODR purposes: <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a>
+                Our email for ODR purposes: <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a>
               </p>
               <p className="text-gray-500 mt-1 italic">
                 Note: We are not obliged to and do not currently participate in an Alternative Dispute Resolution (ADR) scheme.
@@ -355,7 +355,7 @@ export default function TermsPage() {
           <Section id="contact-terms" title="16. CONTACT">
             <div className="border border-white/10 bg-[#111111] p-4 font-mono text-xs space-y-1">
               <p className="text-white font-bold">AiTrackr</p>
-              <p>General enquiries: <a href="mailto:hello@aitrackr.io" className="text-amber-500 underline">hello@aitrackr.io</a></p>
+              <p>General enquiries: <a href="mailto:info@aitrackr.io" className="text-amber-500 underline">info@aitrackr.io</a></p>
               <p>Legal &amp; privacy: <a href="mailto:privacy@aitrackr.io" className="text-amber-500 underline">privacy@aitrackr.io</a></p>
               <p>Billing &amp; refunds: <a href="mailto:billing@aitrackr.io" className="text-amber-500 underline">billing@aitrackr.io</a></p>
             </div>
