@@ -3,37 +3,31 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import {
-  LayoutDashboard,
-  CreditCard,
-  BarChart3,
-  Puzzle,
-  Settings,
-  Zap,
-} from 'lucide-react'
+import { Activity, LayoutDashboard, CreditCard, BarChart3, Puzzle, Settings } from 'lucide-react'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/subscriptions', label: 'Subscriptions', icon: CreditCard },
-  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/dashboard/extension', label: 'Extension', icon: Puzzle },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+  { href: '/dashboard', label: 'DASHBOARD', icon: LayoutDashboard },
+  { href: '/dashboard/subscriptions', label: 'SUBSCRIPTIONS', icon: CreditCard },
+  { href: '/dashboard/analytics', label: 'ANALYTICS', icon: BarChart3 },
+  { href: '/dashboard/extension', label: 'EXTENSION', icon: Puzzle },
+  { href: '/dashboard/settings', label: 'SETTINGS', icon: Settings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 flex-shrink-0 border-r border-border bg-card h-full flex flex-col">
-      <div className="p-6 border-b border-border">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <Zap className="h-4 w-4 text-primary-foreground" />
+    <aside className="w-60 flex-shrink-0 border-r border-white/10 bg-black h-full flex flex-col">
+      <div className="p-5 border-b border-white/10">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-white flex items-center justify-center">
+            <Activity className="h-4 w-4 text-black" />
           </div>
-          <span className="font-bold text-lg tracking-tight">AiTrackr</span>
+          <span className="font-mono font-bold text-white tracking-tight">AiTrackr</span>
         </Link>
       </div>
-      <nav className="flex-1 p-4 space-y-1">
+
+      <nav className="flex-1 p-3 space-y-0.5">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
@@ -42,20 +36,23 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                'flex items-center gap-3 px-3 py-2.5 text-xs font-mono font-medium transition-colors',
                 isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                  ? 'bg-amber-500 text-black'
+                  : 'text-gray-500 hover:text-white hover:bg-white/5'
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5" />
               {item.label}
             </Link>
           )
         })}
       </nav>
-      <div className="p-4 border-t border-border">
-        <p className="text-xs text-muted-foreground">v{process.env.npm_package_version ?? '0.1.0'}</p>
+
+      <div className="p-4 border-t border-white/10">
+        <Link href="/" className="text-xs font-mono text-gray-600 hover:text-gray-400 transition-colors">
+          ← BACK_TO_SITE
+        </Link>
       </div>
     </aside>
   )

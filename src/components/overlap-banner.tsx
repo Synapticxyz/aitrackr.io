@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { AlertTriangle, X, TrendingDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { AlertTriangle, TrendingDown, X } from 'lucide-react'
 import { formatMoney } from '@/lib/currencies'
 import { toast } from 'sonner'
 
@@ -15,24 +14,9 @@ interface OverlapBannerProps {
 }
 
 const typeConfig = {
-  DUPLICATE_CAPABILITY: {
-    icon: AlertTriangle,
-    label: 'Duplicate Capability',
-    color: 'border-yellow-500/50 bg-yellow-500/10',
-    iconColor: 'text-yellow-500',
-  },
-  UNUSED_SUBSCRIPTION: {
-    icon: TrendingDown,
-    label: 'Unused Subscription',
-    color: 'border-red-500/50 bg-red-500/10',
-    iconColor: 'text-red-500',
-  },
-  WRONG_TIER: {
-    icon: AlertTriangle,
-    label: 'Wrong Tier',
-    color: 'border-blue-500/50 bg-blue-500/10',
-    iconColor: 'text-blue-500',
-  },
+  DUPLICATE_CAPABILITY: { icon: AlertTriangle, label: 'DUPLICATE_CAPABILITY', border: 'border-amber-500/40', bg: 'bg-amber-500/5', iconColor: 'text-amber-500' },
+  UNUSED_SUBSCRIPTION: { icon: TrendingDown, label: 'UNUSED_SUBSCRIPTION', border: 'border-red-500/40', bg: 'bg-red-500/5', iconColor: 'text-red-400' },
+  WRONG_TIER: { icon: AlertTriangle, label: 'WRONG_TIER', border: 'border-blue-500/40', bg: 'bg-blue-500/5', iconColor: 'text-blue-400' },
 }
 
 export function OverlapBanner({ id, type, description, potentialSavings, currency = 'USD' }: OverlapBannerProps) {
@@ -59,20 +43,23 @@ export function OverlapBanner({ id, type, description, potentialSavings, currenc
   }
 
   return (
-    <div className={`flex items-start gap-3 p-4 rounded-lg border ${config.color}`}>
-      <Icon className={`h-5 w-5 mt-0.5 flex-shrink-0 ${config.iconColor}`} />
+    <div className={`flex items-start gap-3 p-4 border ${config.border} ${config.bg}`}>
+      <Icon className={`h-4 w-4 mt-0.5 flex-shrink-0 ${config.iconColor}`} />
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-medium text-muted-foreground mb-0.5">{config.label}</p>
-        <p className="text-sm">{description}</p>
+        <p className={`text-xs font-mono font-bold mb-1 ${config.iconColor}`}>[{config.label}]</p>
+        <p className="text-sm text-gray-300">{description}</p>
         {potentialSavings > 0 && (
-          <p className="text-sm font-medium text-green-500 mt-1">
-            Potential savings: {formatMoney(potentialSavings, currency)}/month
+          <p className="text-xs font-mono text-amber-500 mt-1.5">
+            POTENTIAL_SAVINGS: {formatMoney(potentialSavings, currency)}/month
           </p>
         )}
       </div>
-      <Button variant="ghost" size="icon" className="flex-shrink-0" onClick={handleDismiss}>
-        <X className="h-4 w-4" />
-      </Button>
+      <button
+        onClick={handleDismiss}
+        className="text-gray-600 hover:text-white transition-colors flex-shrink-0 p-1"
+      >
+        <X className="h-3.5 w-3.5" />
+      </button>
     </div>
   )
 }
