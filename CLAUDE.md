@@ -143,6 +143,31 @@ Located in `extension/`. Privacy guarantees:
 2. **UNUSED_SUBSCRIPTION**: 0 usage logs for tool in last 14 days → suggest cancel
 3. **WRONG_TIER**: >$15/month but <2 hours usage in 14 days → suggest downgrade
 
+## Pre-Launch Checklist
+
+### Legal pages — fill in before going live
+Search for `[ ` in `src/app/privacy/page.tsx` and `src/app/terms/page.tsx` to find all placeholders:
+
+| Placeholder | File(s) | What to fill in |
+|---|---|---|
+| `[ REGISTERED COMPANY NAME & ADDRESS ]` | privacy, terms | Your legal entity name + street address |
+| `[ VAT NUMBER ]` | terms | EU VAT number, or remove line if not applicable |
+| `[ INSERT COUNTRY ]` | terms §14 | Country whose law governs the contract (e.g., Slovenia) |
+| DPA reference | privacy §8 | Already pre-filled with IP RS (Slovenia) — verify or replace |
+
+### Other blockers before launch
+- [ ] Replace `NEXTAUTH_SECRET` in `.env` with `openssl rand -base64 32`
+- [ ] Replace `CRON_SECRET` in `.env` with `openssl rand -base64 32`
+- [ ] Set up Stripe live keys + webhook + real price IDs
+- [ ] Register `aitrackr.io` domain + point DNS to Hetzner VPS IP
+- [ ] Update `NEXTAUTH_URL` and `NEXT_PUBLIC_APP_URL` to `https://aitrackr.io`
+- [ ] Run `certbot --nginx -d aitrackr.io -d www.aitrackr.io` for SSL
+- [ ] Add `aitrackr.io` to Google OAuth authorized origins + redirect URIs
+- [ ] Verify `aitrackr.io` domain in Resend + set real `RESEND_API_KEY`
+- [ ] Submit Chrome extension to Chrome Web Store + update `NEXT_PUBLIC_EXTENSION_ID`
+
+---
+
 ## Deployment
 
 ```
