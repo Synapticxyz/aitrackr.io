@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/Synapticxyz/aitrackr.io/compare/v0.1.1...v0.1.2) (2026-02-25)
+
+
+### Bug Fixes
+
+* **auth:** show feedback after signup and handle auto sign-in failure ([9723856](https://github.com/Synapticxyz/aitrackr.io/commit/9723856471cec0450279cdd879ae1852a39b3351))
+
 ### [0.1.1](https://github.com/Synapticxyz/aitrackr.io/compare/v0.1.0...v0.1.1) (2026-02-24)
 
 
