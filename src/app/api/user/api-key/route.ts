@@ -29,7 +29,19 @@ export async function POST() {
   return NextResponse.json({ apiKey: newApiKey })
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Extension verification: validate via X-API-Key header
+  const apiKeyHeader = request.headers.get('X-API-Key')
+  if (apiKeyHeader) {
+    const user = await prisma.user.findFirst({
+      where: { apiKey: apiKeyHeader, deletedAt: null },
+      select: { id: true },
+    })
+    if (!user) return errors.unauthorized()
+    return NextResponse.json({ valid: true })
+  }
+
+  // Dashboard: validate via session
   const session = await auth()
   if (!session?.user) return errors.unauthorized()
 

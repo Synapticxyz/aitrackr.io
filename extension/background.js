@@ -1,7 +1,7 @@
 // AiTrackr Background Service Worker
 // Privacy-first: tracks time on AI tools, never reads content
 
-const DEFAULT_API_BASE = 'https://aitrackr.io'
+const DEFAULT_API_BASE = 'https://aitrackr.xflashdev.com'
 const QUEUE_KEY = 'usageQueue'
 const SYNC_ALARM = 'syncUsage'
 const IDLE_ALARM = 'idleCheck'

@@ -3,7 +3,7 @@
   "name": "AiTrackr",
   "version": "1.0.0",
   "description": "Automatically track your AI tool usage. Privacy-first: never reads prompts or content.",
-  "homepage_url": "https://aitrackr.io",
+  "homepage_url": "https://aitrackr.xflashdev.com",
 
   "permissions": [
     "storage",
@@ -77,5 +77,5 @@
     "128": "icons/icon128.png"
   },
 
-  "privacy_policy": "https://aitrackr.io/privacy"
+  "privacy_policy": "https://aitrackr.xflashdev.com/privacy"
 }

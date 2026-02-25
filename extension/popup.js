@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE = 'https://aitrackr.io'
+const DEFAULT_API_BASE = 'https://aitrackr.xflashdev.com'
 const COLORS = ['c0','c1','c2','c3','c4','c5','c6','c7']
 
 // ─── DOM refs ─────────────────────────────────────────────────────────────────
@@ -150,7 +150,13 @@ connectBtn.addEventListener('click', async () => {
 
   try {
     const apiBase = await getApiBase()
-    const res = await fetch(`${apiBase}/api/health`)
+    const res = await fetch(`${apiBase}/api/user/api-key`, {
+      headers: { 'X-API-Key': key },
+    })
+    if (res.status === 401) {
+      setMsg('Invalid API key. Check the key from your dashboard.', 'error')
+      return
+    }
     if (!res.ok) throw new Error('Server unreachable')
 
     await chrome.storage.sync.set({ apiKey: key, connected: true, lastError: null })
