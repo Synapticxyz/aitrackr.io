@@ -9,7 +9,7 @@ echo "[Deploy] Building..."
 npm run build
 
 echo "[Deploy] Copying artifacts to standalone..."
-cp -r public/* .next/standalone/ 2>/dev/null || true
+cp -r public .next/standalone/
 cp .next/BUILD_ID .next/app-build-manifest.json .next/app-path-routes-manifest.json \
    .next/prerender-manifest.json .next/react-loadable-manifest.json \
    .next/required-server-files.json .next/images-manifest.json \
