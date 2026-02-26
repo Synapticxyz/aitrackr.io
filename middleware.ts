@@ -45,7 +45,7 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 
 export default auth((req: NextRequest & { auth: unknown }) => {
   const { pathname } = req.nextUrl
-  const session = (req as { auth: { user?: { id: string } } | null }).auth
+  const session = (req as { auth: { user?: { id: string; isAdmin?: boolean } } | null }).auth
 
   // Always add security headers
   const response = NextResponse.next()
@@ -71,6 +71,20 @@ export default auth((req: NextRequest & { auth: unknown }) => {
     url.pathname = '/auth/signin'
     url.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(url)
+  }
+
+  // Admin routes require isAdmin flag
+  if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+    if (!session.user.isAdmin) {
+      if (pathname.startsWith('/api/')) {
+        return addSecurityHeaders(
+          NextResponse.json({ error: 'Forbidden', code: 'FORBIDDEN', status: 403 }, { status: 403 })
+        )
+      }
+      const url = req.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
+    }
   }
 
   return response

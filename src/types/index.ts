@@ -74,6 +74,7 @@ declare module 'next-auth' {
       subscriptionStatus: SubscriptionStatus
       timezone: string
       currency: string
+      isAdmin: boolean
     }
   }
 
@@ -82,6 +83,7 @@ declare module 'next-auth' {
     subscriptionStatus: SubscriptionStatus
     timezone: string
     currency: string
+    isAdmin?: boolean
     deletedAt?: Date | null
   }
 }

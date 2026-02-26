@@ -54,6 +54,7 @@ model User {
   // Security & API
   apiKey          String?   @unique @map("api_key")
   apiKeyCreatedAt DateTime? @map("api_key_created_at")
+  isAdmin         Boolean   @default(false) @map("is_admin")
 
   // GDPR & Privacy
   timezone                  String   @default("UTC")
