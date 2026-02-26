@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth-cache'
 import { OverlapBanner } from '@/components/overlap-banner'
 import { formatDuration, formatDate } from '@/lib/utils'
 import { formatMoney } from '@/lib/currencies'
-import { DollarSign, Clock, AlertTriangle, Activity, Zap } from 'lucide-react'
+import { Banknote, Clock, AlertTriangle, Activity, Zap } from 'lucide-react'
 import { startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns'
 import { RealtimeTracker } from './_components/realtime-tracker'
 
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
   const topToolName = Object.entries(topTool).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
 
   const statCards = [
-    { label: 'MONTHLY_SPEND', value: formatMoney(totalMonthlySpend, session.user.currency), sub: `${subscriptions.length} active subscriptions`, icon: DollarSign, amber: true },
+    { label: 'MONTHLY_SPEND', value: formatMoney(totalMonthlySpend, session.user.currency), sub: `${subscriptions.length} active subscriptions`, icon: Banknote, amber: true },
     { label: 'TODAY_USAGE', value: formatDuration(todaySeconds), sub: 'across AI tools', icon: Clock, amber: false },
     { label: 'OVERLAP_ALERTS', value: String(alerts.length), sub: 'potential savings detected', icon: AlertTriangle, amber: alerts.length > 0 },
     { label: 'TOP_TOOL', value: topToolName ?? '—', sub: monthSeconds > 0 ? `${formatDuration(monthSeconds)} this month` : 'No usage yet', icon: Activity, amber: false },
