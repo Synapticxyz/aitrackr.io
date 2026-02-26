@@ -2,9 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'aitrackr',
-      script: 'node',
-      args: '.next/standalone/server.js',
-      cwd: '/home/xflash/aitrackr',
+      script: 'server.js',
+      cwd: '/home/xflash/aitrackr/.next/standalone',
       env: {
         NODE_ENV: 'production',
         PORT: 3002,
