@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 import { Copy, RefreshCw, CheckCircle, Shield, Lightbulb, Send, Download, FolderOpen, Tag, AlertCircle } from 'lucide-react'
+import { SUPPORTED_TOOLS } from '@/lib/supported-tools'
 
 interface ApiKeyData { hasApiKey: boolean; maskedKey: string | null; apiKeyCreatedAt: string | null }
 interface SuggestionForm { url: string; name: string; notes: string }
@@ -63,10 +64,7 @@ export default function ExtensionPage() {
     { n: 4, title: 'START_TRACKING', desc: 'Visit ChatGPT, Claude, or any supported AI tool. Usage is tracked automatically.' },
   ]
 
-  const supportedTools = [
-    'ChatGPT', 'Claude', 'Gemini', 'Google AI Studio', 'Perplexity',
-    'Grok', 'Microsoft Copilot', 'Poe', 'Mistral', 'Midjourney', 'Kimi',
-  ]
+  const supportedTools = [...SUPPORTED_TOOLS]
 
   return (
     <div className="space-y-6 max-w-2xl">

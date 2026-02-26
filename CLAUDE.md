@@ -129,7 +129,9 @@ Copy to `.env` for local dev (already done with placeholder values).
 
 ## Chrome Extension
 
-Located in `extension/`. Privacy guarantees:
+Located in `extension/`. When adding a new AI tool, update: `background.js` TOOL_MAP, `content.js` TOOL_CONFIGS, `options.js` TOOLS, and `src/lib/supported-tools.ts` (landing + dashboard use this).
+
+Privacy guarantees:
 - `content.js`: Reads ONLY URL hostname, model badge class names, button aria-labels
 - NEVER reads: textarea content, input values, API responses, DOM text
 - `background.js`: Queues `{tool, model, feature, durationSeconds, sessionId, timestamp}`

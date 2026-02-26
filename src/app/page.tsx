@@ -5,6 +5,7 @@ import {
   Server, Chrome,
 } from 'lucide-react'
 import { LandingNav } from '@/components/landing-nav'
+import { SUPPORTED_TOOLS_COUNT } from '@/lib/supported-tools'
 
 export default function HomePage() {
   return (
@@ -141,9 +142,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { value: '$500K+', label: 'SAVED_THIS_MONTH', amber: true },
-              { value: '10,000+', label: 'ACTIVE_USERS', amber: false },
-              { value: '8', label: 'AI_TOOLS_SUPPORTED', amber: false },
+              { value: '€2.5K+', label: 'SAVED_THIS_MONTH', amber: true },
+              { value: '50+', label: 'ACTIVE_USERS', amber: false },
+              { value: String(SUPPORTED_TOOLS_COUNT), label: 'AI_TOOLS_SUPPORTED', amber: false },
               { value: '0', label: 'DATA_BREACHES', amber: false },
             ].map((s) => (
               <div key={s.label}>
