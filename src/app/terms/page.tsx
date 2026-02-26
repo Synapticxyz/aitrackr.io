@@ -135,14 +135,14 @@ export default function TermsPage() {
               <div className="border border-amber-500/20 bg-amber-500/5 p-4 font-mono text-xs space-y-2">
                 <p className="text-amber-500 font-bold">PRO PLAN</p>
                 <ul className="list-disc list-outside ml-4 space-y-0.5 text-gray-400">
-                  <li>Monthly: <strong className="text-white">$8 / month</strong></li>
-                  <li>Annual: <strong className="text-white">$79 / year</strong> (save ~18%)</li>
+                  <li>Monthly: <strong className="text-white">€8 / month</strong></li>
+                  <li>Annual: <strong className="text-white">€79 / year</strong> (save ~18%)</li>
                   <li>Unlimited subscriptions, Chrome extension, advanced analytics, overlap detection</li>
                 </ul>
               </div>
             </div>
             <p>
-              All prices are shown in USD and are <strong className="text-white">exclusive of VAT/taxes</strong>. If you are subject
+              All prices are shown in EUR and are <strong className="text-white">exclusive of VAT/taxes</strong>. If you are subject
               to VAT in the EU, applicable taxes will be added at checkout as required by Directive 2006/112/EC.
             </p>
             <p>

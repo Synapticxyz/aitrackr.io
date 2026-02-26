@@ -34,27 +34,27 @@ async function main() {
   })
   console.log(`✅  Product created: ${product.id}  (${product.name})`)
 
-  // 2. Monthly price — $8 / month
+  // 2. Monthly price — €8 / month
   const monthly = await stripe.prices.create({
     product: product.id,
     unit_amount: 800,       // cents
-    currency: 'usd',
+    currency: 'eur',
     recurring: { interval: 'month' },
     nickname: 'Pro Monthly',
     metadata: { plan: 'pro_monthly' },
   })
-  console.log(`✅  Monthly price: ${monthly.id}  ($8.00 / month)`)
+  console.log(`✅  Monthly price: ${monthly.id}  (€8.00 / month)`)
 
-  // 3. Yearly price — $79 / year
+  // 3. Yearly price — €79 / year
   const yearly = await stripe.prices.create({
     product: product.id,
     unit_amount: 7900,      // cents
-    currency: 'usd',
+    currency: 'eur',
     recurring: { interval: 'year' },
     nickname: 'Pro Yearly',
     metadata: { plan: 'pro_yearly' },
   })
-  console.log(`✅  Yearly price:   ${yearly.id}  ($79.00 / year)`)
+  console.log(`✅  Yearly price:   ${yearly.id}  (€79.00 / year)`)
 
   console.log('\n─────────────────────────────────────────────────────')
   console.log('Add these to your .env file:\n')

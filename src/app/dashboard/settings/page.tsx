@@ -121,7 +121,7 @@ export default function SettingsPage() {
             <div>
               <p className="text-sm font-mono text-white">CURRENT_PLAN</p>
               <p className="text-xs font-mono text-gray-500">
-                {session?.user?.subscriptionStatus === 'PRO' ? 'AiTrackr Pro — $8/month' : 'Free Plan'}
+                {session?.user?.subscriptionStatus === 'PRO' ? 'AiTrackr Pro — €8/month' : 'Free Plan'}
               </p>
             </div>
             <span className={`px-2 py-1 text-xs font-mono font-bold ${session?.user?.subscriptionStatus === 'PRO' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/30' : 'bg-white/5 text-gray-400 border border-white/10'}`}>

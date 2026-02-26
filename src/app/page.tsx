@@ -342,7 +342,7 @@ export default function HomePage() {
                   <p className="text-gray-500 text-sm mt-1">For casual users</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold font-mono text-white">$0</div>
+                  <div className="text-4xl font-bold font-mono text-white">€0</div>
                   <div className="text-xs text-gray-500">/month</div>
                 </div>
               </div>
@@ -376,7 +376,7 @@ export default function HomePage() {
                   <p className="text-gray-500 text-sm mt-1">For power users</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold font-mono text-white">$8</div>
+                  <div className="text-4xl font-bold font-mono text-white">€8</div>
                   <div className="text-xs text-gray-500">/month</div>
                 </div>
               </div>

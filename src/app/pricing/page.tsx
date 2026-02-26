@@ -5,7 +5,7 @@ import { CheckoutButton } from './_checkout-button'
 
 export const metadata: Metadata = {
   title: 'Pricing — Free & Pro Plans',
-  description: 'AiTrackr pricing. Free forever plan + Pro at $8/month or $79/year.',
+  description: 'AiTrackr pricing. Free forever plan + Pro at €8/month or €79/year.',
 }
 
 const FREE_FEATURES = [
@@ -56,7 +56,7 @@ export default function PricingPage() {
           <div className="bg-[#0A0A0A] p-8">
             <p className="text-xs font-mono text-gray-500 mb-1">PLAN_FREE</p>
             <div className="flex items-end gap-1 mb-6">
-              <span className="text-4xl font-bold font-mono text-white">$0</span>
+              <span className="text-4xl font-bold font-mono text-white">€0</span>
               <span className="text-gray-500 font-mono text-sm mb-1">/forever</span>
             </div>
             <ul className="space-y-3 mb-8">
@@ -79,10 +79,10 @@ export default function PricingPage() {
             </div>
             <p className="text-xs font-mono text-amber-500 mb-1">PLAN_PRO</p>
             <div className="flex items-end gap-1 mb-1">
-              <span className="text-4xl font-bold font-mono text-white">$8</span>
+              <span className="text-4xl font-bold font-mono text-white">€8</span>
               <span className="text-gray-500 font-mono text-sm mb-1">/month</span>
             </div>
-            <p className="text-xs font-mono text-gray-500 mb-6">or $79/year — save 18%</p>
+            <p className="text-xs font-mono text-gray-500 mb-6">or €79/year — save 18%</p>
             <ul className="space-y-3 mb-8">
               {PRO_FEATURES.map((f) => (
                 <li key={f} className="flex items-center gap-2 text-sm font-mono text-gray-300">
@@ -92,8 +92,8 @@ export default function PricingPage() {
               ))}
             </ul>
             <div className="space-y-2">
-              <CheckoutButton priceId={process.env.STRIPE_PRICE_ID_MONTHLY ?? ''} label="SUBSCRIBE_MONTHLY — $8/mo" />
-              <CheckoutButton priceId={process.env.STRIPE_PRICE_ID_YEARLY ?? ''} label="SUBSCRIBE_YEARLY — $79/yr" variant="outline" />
+              <CheckoutButton priceId={process.env.STRIPE_PRICE_ID_MONTHLY ?? ''} label="SUBSCRIBE_MONTHLY — €8/mo" />
+              <CheckoutButton priceId={process.env.STRIPE_PRICE_ID_YEARLY ?? ''} label="SUBSCRIBE_YEARLY — €79/yr" variant="outline" />
             </div>
           </div>
         </div>

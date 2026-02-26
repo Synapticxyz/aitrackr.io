@@ -36,7 +36,7 @@ export function SubscriptionGate({ children, feature, showUpgradeInline }: Subsc
           {feature ? `${feature} is a Pro feature.` : 'Upgrade to Pro to unlock this feature.'}
         </p>
         <Button onClick={() => router.push('/pricing')} size="sm">
-          Upgrade to Pro — $8/month
+          Upgrade to Pro — €8/month
         </Button>
       </div>
     )
@@ -61,7 +61,7 @@ export function SubscriptionGate({ children, feature, showUpgradeInline }: Subsc
               {feature
                 ? `${feature} is available on the Pro plan.`
                 : 'This feature requires a Pro subscription.'}
-              {' '}Upgrade for $8/month.
+              {' '}Upgrade for €8/month.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 justify-end">
