@@ -178,7 +178,7 @@ Hetzner VPS
 ├── app (3000) → Next.js standalone
 └── db (5432) → Postgres 15
 
-Push to main → CI/CD → SSH → scripts/deploy.sh
+Deploy to Hetzner: manual only (GitHub Actions → "Run workflow" on deploy.yml). Push to main does not deploy; use home server for testing first.
 ```
 
 CI/CD secrets needed (set in your deployment pipeline):
