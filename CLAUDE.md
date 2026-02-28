@@ -133,7 +133,8 @@ Located in `extension/`. Version is in `extension/manifest.json`.
 
 **When you update the extension** (any change under `extension/`):
 1. **Bump the version** — `npm run extension:version` (patch), or `extension:version:minor` / `extension:version:major`. This updates `extension/manifest.json`.
-2. **Pack for the web** — `npm run extension:pack` (or `extension:build` to bump patch + pack). This:
+2. **Update the changelog** — add the new version entry at the top of the `CHANGELOG` array in `src/app/api/extension/version/route.ts` with the date and bullet-point notes.
+3. **Pack for the web** — `npm run extension:pack` (or `extension:build` to bump patch + pack). This:
    - Copies sources to `extension/dist/` and creates `aitrackr-extension-vX.Y.Z.zip`
    - Copies the zip to `public/extension/` as both versioned and `aitrackr-extension-latest.zip`
    - Writes `public/extension/version.json` so the dashboard shows the current version and the download link serves the latest zip.

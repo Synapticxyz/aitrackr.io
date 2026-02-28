@@ -10,7 +10,18 @@ When you change any file under `extension/` (e.g. background.js, content.js, pop
 1. **Bump the extension version**  
    Run `npm run extension:version` (patch), or `npm run extension:version:minor` / `npm run extension:version:major` as appropriate. This updates `extension/manifest.json`.
 
-2. **Pack for the web**  
+2. **Update the VERSION & CHANGELOG**  
+   Add a new entry at the **top** of the `CHANGELOG` array in `src/app/api/extension/version/route.ts`:
+   ```ts
+   {
+     version: 'X.Y.Z',
+     date: 'YYYY-MM-DD',
+     notes: ['What changed', 'Another change'],
+   },
+   ```
+   This powers the VERSION_&_CHANGELOG section in the dashboard Extension page.
+
+3. **Pack for the web**  
    Run `npm run extension:pack`. This:
    - Builds the zip in `extension/dist/aitrackr-extension-vX.Y.Z.zip`
    - Copies the zip to `public/extension/` (versioned + `aitrackr-extension-latest.zip`)
@@ -18,4 +29,4 @@ When you change any file under `extension/` (e.g. background.js, content.js, pop
 
 Alternatively use `npm run extension:build` to do both (bump patch + pack) in one step.
 
-Never leave the extension updated in source without bumping the version and running pack — otherwise the dashboard will serve an old zip and show an old version number.
+Never leave the extension updated in source without bumping the version, updating the changelog, and running pack — otherwise the dashboard will serve an old zip and show stale version/changelog info.

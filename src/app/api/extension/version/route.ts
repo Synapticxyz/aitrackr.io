@@ -5,9 +5,28 @@ import { handleCorsOptions, withCors } from '@/lib/cors'
 
 const CHANGELOG: { version: string; date: string; notes: string[] }[] = [
   {
+    version: '1.0.4',
+    date: '2026-02-28',
+    notes: [
+      'Fixed "Failed to fetch" on Sync now — extension now auto-clears stale localhost API base on install/startup',
+      'CORS preflight (OPTIONS) now returns correct headers so Chrome allows sync requests',
+    ],
+  },
+  {
+    version: '1.0.3',
+    date: '2026-02-28',
+    notes: [
+      'Default API base changed to production URL (aitrackr.xflashdev.com)',
+      'Fixed NEXT_PUBLIC_APP_URL pointing to localhost',
+    ],
+  },
+  {
     version: '1.0.2',
     date: '2026-02-27',
-    notes: ['Default API base set to localhost:3002 for dev', 'Dashboard link to latest extension zip'],
+    notes: [
+      'Dashboard download button always serves latest extension zip',
+      'Version number on download button auto-updates from manifest',
+    ],
   },
   {
     version: '1.0.0',
