@@ -167,6 +167,15 @@
       display: flex; justify-content: space-between;
     }
     .update-link { color: #F59E0B; text-decoration: none; }
+    .sync-error {
+      padding: 6px 16px; font-size: 11px; color: #f87171;
+      background: #450a0a; border-top: 1px solid #7f1d1d;
+    }
+    .sync-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .sync-row .btn { flex: 0 0 auto; }
+    .sync-hint { font-size: 11px; color: #475569; }
   </style>
 </head>
 <body>
@@ -189,6 +198,12 @@
     <span class="tracking-tool" id="tracking-tool">—</span>
   </div>
 
+  <!-- Sync now (visible when connected) -->
+  <div id="sync-row" class="section sync-row" style="display:none">
+    <button class="btn btn-ghost" id="sync-now-btn">Sync now</button>
+    <span class="sync-hint">Send usage to dashboard</span>
+  </div>
+
   <!-- Today's stats -->
   <div id="stats-section" class="section" style="display:none">
     <div class="section-title">Today's Usage</div>
@@ -203,7 +218,6 @@
   <div id="queue-section" class="section" style="display:none">
     <div class="queue-row">
       <span class="queue-text" id="queue-text">0 sessions pending sync</span>
-      <button class="sync-btn" id="sync-now-btn">Sync now</button>
     </div>
   </div>
 
@@ -225,6 +239,8 @@
     <button class="btn btn-ghost" id="dashboard-btn">Open Dashboard</button>
     <button class="btn btn-ghost btn-danger" id="disconnect-btn">Disconnect</button>
   </div>
+
+  <div id="sync-error" class="sync-error" style="display:none"></div>
 
   <!-- Version bar -->
   <div class="version-bar">

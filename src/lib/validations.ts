@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const usageLogSchema = z.object({
   tool: z.string().min(1).max(100),
-  model: z.string().max(100).optional(),
+  model: z.string().max(100).optional().nullable(),
   feature: z.string().min(1).max(100),
   durationSeconds: z.number().int().min(1).max(86400),
   sessionId: z.string().min(1).max(200),

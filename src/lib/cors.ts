@@ -21,7 +21,7 @@ export function corsHeaders(origin: string | null): HeadersInit {
   return {
     'Access-Control-Allow-Origin': isAllowed ? origin : (allowedOrigins[0] ?? ''),
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'X-API-Key, Content-Type, Authorization',
+    'Access-Control-Allow-Headers': 'X-API-Key, X-Extension-Version, Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   }
 }

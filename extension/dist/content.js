@@ -47,6 +47,17 @@ const TOOL_CONFIGS = {
       'code':      ['code', 'run code'],
     },
   },
+  'gemini.google': {
+    modelSelectors: [
+      '[data-model-name]',
+      '.model-selector span',
+      'div[jsname] span[class*="model"]',
+    ],
+    featureMap: {
+      'image-gen': ['image', 'generate image'],
+      'code':      ['code', 'run code'],
+    },
+  },
   'aistudio.google.com': {
     modelSelectors: [
       'mat-select[aria-label*="model"] .mat-select-value-text',

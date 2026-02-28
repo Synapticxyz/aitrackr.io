@@ -25,6 +25,8 @@ const disconnectBtn   = $('disconnect-btn')
 const settingsBtn     = $('settings-btn')
 const versionLabel    = $('version-label')
 const updateNotice    = $('update-notice')
+const syncErrorEl     = $('sync-error')
+const syncRow         = $('sync-row')
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
@@ -78,6 +80,7 @@ async function render() {
   if (isConnected) {
     setupSection.style.display = 'none'
     footerDiv.style.display = 'flex'
+    if (syncRow) syncRow.style.display = 'flex'
 
     // Stats
     const today = local.todayCache
@@ -131,6 +134,7 @@ async function render() {
   } else {
     setupSection.style.display = 'block'
     footerDiv.style.display = 'none'
+    if (syncRow) syncRow.style.display = 'none'
     statsSection.style.display = 'none'
     trackingBanner.style.display = 'none'
     queueSection.style.display = 'none'
@@ -181,15 +185,30 @@ disconnectBtn.addEventListener('click', async () => {
 // ─── Sync Now ─────────────────────────────────────────────────────────────────
 
 syncNowBtn.addEventListener('click', async () => {
+  syncErrorEl.style.display = 'none'
+  syncErrorEl.textContent = ''
   syncNowBtn.textContent = 'Syncing...'
   syncNowBtn.disabled = true
-  // Trigger background alarm
-  await chrome.alarms.create('syncNow', { when: Date.now() + 100 })
-  setTimeout(async () => {
+  try {
+    const res = await chrome.runtime.sendMessage({ type: 'SYNC_NOW' })
+    if (res && res.success) {
+      syncNowBtn.textContent = 'Synced'
+    } else {
+      syncNowBtn.textContent = 'Sync now'
+      const err = (res && res.error) ? String(res.error) : 'Sync failed'
+      syncErrorEl.textContent = err
+      syncErrorEl.style.display = 'block'
+    }
+  } catch (e) {
     syncNowBtn.textContent = 'Sync now'
-    syncNowBtn.disabled = false
-    await render()
-  }, 2000)
+    syncErrorEl.textContent = 'Sync failed. Check connection.'
+    syncErrorEl.style.display = 'block'
+  }
+  syncNowBtn.disabled = false
+  await render()
+  if (syncNowBtn.textContent === 'Synced') {
+    setTimeout(() => { syncNowBtn.textContent = 'Sync now' }, 1500)
+  }
 })
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────

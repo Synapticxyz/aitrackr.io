@@ -11,9 +11,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
-import { Plus, Pencil, Trash2, DollarSign } from 'lucide-react'
+import { Plus, Pencil, Trash2, Banknote } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
-import { formatMoney } from '@/lib/currencies'
+import { formatMoney, getCurrency } from '@/lib/currencies'
+import { SUBSCRIPTION_PRESETS, PRESET_OTHER } from '@/lib/subscription-presets'
 import type { Subscription } from '@prisma/client'
 import Link from 'next/link'
 
@@ -46,11 +47,39 @@ export default function SubscriptionsPage() {
 
   useEffect(() => { load() }, [])
 
-  function openAdd() { form.reset(); setEditing(null); setModalOpen(true) }
+  function openAdd() {
+    form.reset(defaultFormValues())
+    setEditing(null)
+    setModalOpen(true)
+  }
+  function defaultFormValues() {
+    return { name: '', provider: '', cost: 0, billingCycle: 'MONTHLY' as const, category: 'TEXT_GEN' as const, features: ['chat'], url: '', notes: '', nextBillingDate: new Date().toISOString().split('T')[0]! }
+  }
   function openEdit(sub: Subscription) {
     setEditing(sub)
     form.reset({ name: sub.name, provider: sub.provider, cost: Number(sub.cost), billingCycle: sub.billingCycle, category: sub.category, features: sub.features as string[], url: sub.url ?? '', notes: sub.notes ?? '', nextBillingDate: new Date(sub.nextBillingDate).toISOString().split('T')[0]! })
     setModalOpen(true)
+  }
+  function getSelectedPresetKey(): string {
+    const name = form.getValues('name')
+    const provider = form.getValues('provider')
+    const match = SUBSCRIPTION_PRESETS.find((p) => p.name === name && p.provider === provider)
+    return match ? match.name : PRESET_OTHER
+  }
+  function onServicePresetChange(value: string) {
+    if (value === PRESET_OTHER) {
+      form.setValue('name', '')
+      form.setValue('provider', '')
+      form.setValue('url', '')
+      return
+    }
+    const preset = SUBSCRIPTION_PRESETS.find((p) => p.name === value)
+    if (preset) {
+      form.setValue('name', preset.name)
+      form.setValue('provider', preset.provider)
+      form.setValue('url', preset.url)
+      form.setValue('category', preset.category)
+    }
   }
 
   async function handleDelete(id: string) {
@@ -123,7 +152,7 @@ export default function SubscriptionsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="border border-white/10 flex flex-col items-center justify-center py-16 gap-3">
-          <DollarSign className="h-8 w-8 text-gray-700" />
+          <Banknote className="h-8 w-8 text-gray-700" />
           <p className="text-sm font-mono text-gray-500">NO_SUBSCRIPTIONS_YET</p>
           <button onClick={openAdd} className="px-4 py-2 border border-white/10 text-xs font-mono text-gray-400 hover:text-white hover:border-white/20 transition-all">
             + ADD_FIRST_SUBSCRIPTION
@@ -169,17 +198,30 @@ export default function SubscriptionsPage() {
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-xs font-mono text-gray-400">SERVICE</label>
+                <Select value={getSelectedPresetKey()} onValueChange={onServicePresetChange}>
+                  <SelectTrigger className={inputCls}><SelectValue placeholder="Select to auto-fill name, provider, URL" /></SelectTrigger>
+                  <SelectContent className="bg-[#111111] border-white/10 font-mono text-white">
+                    {SUBSCRIPTION_PRESETS.map((p) => (
+                      <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>
+                    ))}
+                    <SelectItem value={PRESET_OTHER}>Other (enter manually)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-[10px] font-mono text-gray-500">Fills name, provider &amp; URL below</p>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField control={form.control} name="name" render={({ field }) => (
-                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">NAME</FormLabel><FormControl><Input placeholder="ChatGPT Plus" className={inputCls} {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">NAME</FormLabel><FormControl><Input placeholder="e.g. ChatGPT Plus" className={inputCls} {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="provider" render={({ field }) => (
-                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">PROVIDER</FormLabel><FormControl><Input placeholder="OpenAI" className={inputCls} {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">PROVIDER</FormLabel><FormControl><Input placeholder="e.g. OpenAI" className={inputCls} {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField control={form.control} name="cost" render={({ field }) => (
-                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">COST ($)</FormLabel><FormControl>
+                  <FormItem><FormLabel className="text-xs font-mono text-gray-400">COST ({getCurrency(session?.user?.currency ?? 'EUR').symbol})</FormLabel><FormControl>
                     <Input type="number" step="0.01" min="0" className={inputCls} {...field} onChange={(e) => { const v = parseFloat(e.target.value); field.onChange(isNaN(v) ? '' : v) }} />
                   </FormControl><FormMessage /></FormItem>
                 )} />

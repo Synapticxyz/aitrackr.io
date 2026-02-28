@@ -39,12 +39,13 @@ export async function sendRenewalAlertEmail(
   to: string,
   subscriptionName: string,
   cost: number,
-  renewalDate: Date
+  renewalDate: Date,
+  currency = 'EUR'
 ): Promise<boolean> {
   return send(
     to,
     `Reminder: ${subscriptionName} renews soon`,
-    createElement(RenewalAlertEmail, { subscriptionName, cost, renewalDate })
+    createElement(RenewalAlertEmail, { subscriptionName, cost, renewalDate, currency })
   )
 }
 

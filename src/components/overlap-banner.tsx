@@ -19,7 +19,7 @@ const typeConfig = {
   WRONG_TIER: { icon: AlertTriangle, label: 'WRONG_TIER', border: 'border-blue-500/40', bg: 'bg-blue-500/5', iconColor: 'text-blue-400' },
 }
 
-export function OverlapBanner({ id, type, description, potentialSavings, currency = 'USD' }: OverlapBannerProps) {
+export function OverlapBanner({ id, type, description, potentialSavings, currency = 'EUR' }: OverlapBannerProps) {
   const [dismissed, setDismissed] = useState(false)
   const config = typeConfig[type]
   const Icon = config.icon

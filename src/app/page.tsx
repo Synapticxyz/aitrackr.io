@@ -94,7 +94,7 @@ export default function HomePage() {
                           <MessageSquare className="w-4 h-4" />
                           ChatGPT Plus
                         </span>
-                        <span className="text-gray-300">$20.00</span>
+                        <span className="text-gray-300">€20.00</span>
                         <span className="text-green-400">High</span>
                         <span className="text-green-400">[KEEP]</span>
                       </div>
@@ -104,7 +104,7 @@ export default function HomePage() {
                           <Image className="w-4 h-4" />
                           Midjourney
                         </span>
-                        <span className="text-gray-300">$30.00</span>
+                        <span className="text-gray-300">€30.00</span>
                         <span className="text-red-400">Low</span>
                         <span className="text-amber-500">[OVERLAP]</span>
                       </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
                           <Sparkles className="w-4 h-4" />
                           Claude Pro
                         </span>
-                        <span className="text-gray-300">$20.00</span>
+                        <span className="text-gray-300">€20.00</span>
                         <span className="text-green-400">High</span>
                         <span className="text-green-400">[KEEP]</span>
                       </div>
@@ -123,7 +123,7 @@ export default function HomePage() {
                     <div className="mt-6 pt-4 border-t border-white/10">
                       <div className="flex justify-between items-center">
                         <span className="text-gray-400">Potential Monthly Savings:</span>
-                        <span className="text-2xl font-bold text-amber-500">$45.00</span>
+                        <span className="text-2xl font-bold text-amber-500">€45.00</span>
                       </div>
                     </div>
                   </div>

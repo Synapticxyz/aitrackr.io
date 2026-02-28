@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { formatMoney } from '@/lib/currencies'
 
 type SubscriptionSlim = {
   id: string
@@ -21,7 +22,8 @@ interface OverlapResult {
 }
 
 export async function detectOverlaps(userId: string): Promise<OverlapResult[]> {
-  const [subscriptions, recentUsage] = await Promise.all([
+  const [user, subscriptions, recentUsage] = await Promise.all([
+    prisma.user.findUnique({ where: { id: userId }, select: { currency: true } }),
     prisma.subscription.findMany({
       where: { userId, isActive: true, isDeleted: false },
       select: { id: true, name: true, provider: true, cost: true, features: true },
@@ -34,12 +36,13 @@ export async function detectOverlaps(userId: string): Promise<OverlapResult[]> {
       select: { tool: true, durationSeconds: true },
     }),
   ])
+  const currency = user?.currency ?? 'EUR'
 
   const results: OverlapResult[] = []
 
   results.push(...detectDuplicateCapabilities(subscriptions))
-  results.push(...detectUnusedSubscriptions(subscriptions, recentUsage))
-  results.push(...detectWrongTier(subscriptions, recentUsage))
+  results.push(...detectUnusedSubscriptions(subscriptions, recentUsage, currency))
+  results.push(...detectWrongTier(subscriptions, recentUsage, currency))
 
   return results
 }
@@ -86,7 +89,8 @@ function detectDuplicateCapabilities(subscriptions: SubscriptionSlim[]): Overlap
 
 function detectUnusedSubscriptions(
   subscriptions: SubscriptionSlim[],
-  recentUsage: UsageLogSlim[]
+  recentUsage: UsageLogSlim[],
+  currency: string
 ): OverlapResult[] {
   const usedTools = new Set(recentUsage.map((u) => u.tool.toLowerCase()))
 
@@ -98,7 +102,7 @@ function detectUnusedSubscriptions(
     })
     .map((sub) => ({
       type: 'UNUSED_SUBSCRIPTION' as const,
-      description: `${sub.name} hasn't been used in the last 14 days. You could save ${formatCost(Number(sub.cost))}/month by cancelling it.`,
+      description: `${sub.name} hasn't been used in the last 14 days. You could save ${formatMoney(Number(sub.cost), currency)}/month by cancelling it.`,
       affectedSubscriptionIds: [sub.id],
       potentialSavings: Number(sub.cost),
     }))
@@ -106,7 +110,8 @@ function detectUnusedSubscriptions(
 
 function detectWrongTier(
   subscriptions: SubscriptionSlim[],
-  recentUsage: UsageLogSlim[]
+  recentUsage: UsageLogSlim[],
+  currency: string
 ): OverlapResult[] {
   const results: OverlapResult[] = []
 
@@ -119,11 +124,11 @@ function detectWrongTier(
 
     const totalHours = toolUsage.reduce((sum, u) => sum + u.durationSeconds, 0) / 3600
 
-    // If paying >$15/month but using less than 2 hours over 14 days — likely wrong tier
+    // If paying >€15/month but using less than 2 hours over 14 days — likely wrong tier
     if (Number(sub.cost) > 15 && totalHours < 2) {
       results.push({
         type: 'WRONG_TIER',
-        description: `You're paying ${formatCost(Number(sub.cost))}/month for ${sub.name} but only used it for ${totalHours.toFixed(1)} hours in the last 14 days. A free or lower tier might be sufficient.`,
+        description: `You're paying ${formatMoney(Number(sub.cost), currency)}/month for ${sub.name} but only used it for ${totalHours.toFixed(1)} hours in the last 14 days. A free or lower tier might be sufficient.`,
         affectedSubscriptionIds: [sub.id],
         potentialSavings: Number(sub.cost) * 0.5,
       })
@@ -131,13 +136,6 @@ function detectWrongTier(
   }
 
   return results
-}
-
-function formatCost(cost: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(cost)
 }
 
 export async function saveOverlapAlerts(userId: string, overlaps: OverlapResult[]): Promise<void> {

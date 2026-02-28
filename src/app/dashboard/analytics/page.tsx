@@ -6,7 +6,7 @@ import {
   Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { formatDuration } from '@/lib/utils'
-import { Download } from 'lucide-react'
+import { Download, RefreshCw } from 'lucide-react'
 
 const COLORS = ['#F59E0B', '#FCD34D', '#D97706', '#B45309', '#92400E', '#78350F', '#6366f1', '#8b5cf6']
 
@@ -24,8 +24,8 @@ export default function AnalyticsPage() {
     setLoading(true)
     try {
       const [toolRes, dateRes] = await Promise.all([
-        fetch(`/api/usage?days=${days}&groupBy=tool`),
-        fetch(`/api/usage?days=${days}&groupBy=date`),
+        fetch(`/api/usage?days=${days}&groupBy=tool`, { cache: 'no-store' }),
+        fetch(`/api/usage?days=${days}&groupBy=date`, { cache: 'no-store' }),
       ])
       if (toolRes.ok) {
         const data = await toolRes.json() as GroupedData
@@ -59,14 +59,29 @@ export default function AnalyticsPage() {
           <h1 className="text-2xl font-bold font-mono text-white mt-1">ANALYTICS</h1>
           <p className="text-sm font-mono text-gray-400">Usage patterns and cost efficiency</p>
         </div>
-        <button
-          onClick={exportCsv}
-          className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-xs font-mono text-gray-400 hover:text-white hover:border-white/20 transition-all"
-        >
-          <Download className="h-3.5 w-3.5" />
-          EXPORT_CSV
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => load(period)}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-xs font-mono text-gray-400 hover:text-white hover:border-white/20 transition-all disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
+            REFRESH
+          </button>
+          <button
+            onClick={exportCsv}
+            className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-xs font-mono text-gray-400 hover:text-white hover:border-white/20 transition-all"
+          >
+            <Download className="h-3.5 w-3.5" />
+            EXPORT_CSV
+          </button>
+        </div>
       </div>
+      {usageByTool.length === 0 && !loading && (
+        <p className="text-xs font-mono text-amber-500/80">
+          No data yet? Use the extension on an AI tool, then switch tabs and click <strong>Sync now</strong> in the extension. Use the same account here as the extension API key.
+        </p>
+      )}
 
       {/* Period selector */}
       <div className="flex gap-0 border border-white/10 w-fit">

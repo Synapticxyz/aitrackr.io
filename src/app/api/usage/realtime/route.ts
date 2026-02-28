@@ -1,16 +1,37 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { errors } from '@/lib/api-error'
+import { corsHeaders, handleCorsOptions, withCors } from '@/lib/cors'
 import { startOfDay, endOfDay } from 'date-fns'
 
-export async function GET() {
-  const session = await auth()
-  if (!session?.user) return errors.unauthorized()
+export async function GET(request: NextRequest) {
+  const corsOpts = handleCorsOptions(request)
+  if (corsOpts) return corsOpts
+
+  const origin = request.headers.get('origin')
+  const apiKey = request.headers.get('x-api-key')
+
+  let userId: string | null = null
+
+  if (apiKey) {
+    const user = await prisma.user.findUnique({
+      where: { apiKey },
+      select: { id: true, deletedAt: true },
+    })
+    if (user && !user.deletedAt) userId = user.id
+  }
+  if (!userId) {
+    const session = await auth()
+    if (session?.user) userId = session.user.id
+  }
+  if (!userId) {
+    return withCors(errors.unauthorized(), origin)
+  }
 
   const today = new Date()
   const dateFilter = { gte: startOfDay(today), lte: endOfDay(today) }
-  const where = { userId: session.user.id, date: dateFilter }
+  const where = { userId, date: dateFilter }
 
   const [aggregate, byToolRows, sessionCountRows] = await Promise.all([
     prisma.usageLog.aggregate({
@@ -35,7 +56,7 @@ export async function GET() {
   )
   const topTool = byToolRows[0]?.tool ?? null
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     totalSeconds,
     totalMinutes: Math.round(totalSeconds / 60),
     byTool,
@@ -43,4 +64,5 @@ export async function GET() {
     sessionCount: sessionCountRows.length,
     updatedAt: new Date().toISOString(),
   })
+  return withCors(response, origin)
 }

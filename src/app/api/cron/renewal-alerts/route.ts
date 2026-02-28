@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     },
     include: {
       user: {
-        select: { email: true, name: true, emailPreferences: true, deletedAt: true },
+        select: { email: true, name: true, emailPreferences: true, deletedAt: true, currency: true },
       },
     },
   })
@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
       sub.user.email,
       sub.name,
       Number(sub.cost),
-      sub.nextBillingDate
+      sub.nextBillingDate,
+      sub.user.currency ?? 'EUR'
     )
     if (ok) sent++
   }

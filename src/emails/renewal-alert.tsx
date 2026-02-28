@@ -3,17 +3,19 @@ import {
   Preview, Text, Hr,
 } from '@react-email/components'
 import { format } from 'date-fns'
+import { formatMoney } from '@/lib/currencies'
 
 interface RenewalAlertEmailProps {
   subscriptionName: string
   cost: number
   renewalDate: Date
+  currency?: string
 }
 
-export default function RenewalAlertEmail({ subscriptionName, cost, renewalDate }: RenewalAlertEmailProps) {
+export default function RenewalAlertEmail({ subscriptionName, cost, renewalDate, currency = 'EUR' }: RenewalAlertEmailProps) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://aitrackr.io'
   const formattedDate = format(renewalDate, 'MMMM d, yyyy')
-  const formattedCost = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cost)
+  const formattedCost = formatMoney(cost, currency ?? 'EUR')
 
   return (
     <Html>

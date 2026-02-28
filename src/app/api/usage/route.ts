@@ -5,7 +5,8 @@ import { usageLogSchema } from '@/lib/validations'
 import { errors } from '@/lib/api-error'
 import { usageRateLimit, generalRateLimit } from '@/lib/rate-limit'
 import { corsHeaders, handleCorsOptions, withCors } from '@/lib/cors'
-import { startOfDay, endOfDay, subDays } from 'date-fns'
+
+export const dynamic = 'force-dynamic'
 
 // POST — receives data from Chrome extension (API key auth)
 export async function POST(request: NextRequest) {
@@ -13,7 +14,8 @@ export async function POST(request: NextRequest) {
   if (corsOpts) return corsOpts
 
   const origin = request.headers.get('origin')
-  const apiKey = request.headers.get('x-api-key')
+  const rawKey = request.headers.get('x-api-key')
+  const apiKey = rawKey?.trim() ?? ''
 
   if (!apiKey) {
     return withCors(errors.invalidApiKey(), origin)
@@ -44,13 +46,16 @@ export async function POST(request: NextRequest) {
 
   const parsed = usageLogSchema.safeParse(body)
   if (!parsed.success) {
-    return withCors(
-      errors.validation(parsed.error.issues[0]?.message ?? 'Validation failed'),
-      origin
-    )
+    const msg = parsed.error.issues[0]?.message ?? 'Validation failed'
+    console.warn('[Usage] Validation failed:', msg, parsed.error.issues)
+    return withCors(errors.validation(msg), origin)
   }
 
   const { tool, model, feature, durationSeconds, sessionId, timestamp } = parsed.data
+
+  // Use UTC date only so analytics date range matches regardless of server timezone
+  const ts = new Date(timestamp)
+  const dateOnly = new Date(Date.UTC(ts.getUTCFullYear(), ts.getUTCMonth(), ts.getUTCDate()))
 
   try {
     const log = await prisma.usageLog.create({
@@ -61,13 +66,15 @@ export async function POST(request: NextRequest) {
         feature,
         durationSeconds,
         sessionId,
-        date: new Date(timestamp),
+        date: dateOnly,
       },
     })
 
+    console.log('[Usage] Created', log.id, 'user=', user.id, 'tool=', tool, 'seconds=', durationSeconds)
     const response = NextResponse.json({ success: true, id: log.id }, { status: 201 })
     return withCors(response, origin)
-  } catch {
+  } catch (err) {
+    console.error('[Usage] Create failed:', err)
     return withCors(errors.internal(), origin)
   }
 }
@@ -85,8 +92,9 @@ export async function GET(request: NextRequest) {
   const groupBy = searchParams.get('groupBy') ?? 'tool'
   const days = Math.min(parseInt(daysParam, 10) || 30, 365)
 
-  const from = startOfDay(subDays(new Date(), days - 1))
-  const to = endOfDay(new Date())
+  const now = new Date()
+  const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - days + 1, 0, 0, 0, 0))
+  const to = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999))
 
   const dateFilter = { gte: from, lte: to }
 

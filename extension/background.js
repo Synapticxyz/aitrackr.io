@@ -17,6 +17,7 @@ const TOOL_MAP = {
   'chatgpt.com':            { tool: 'ChatGPT',       provider: 'OpenAI',      category: 'TEXT_GEN' },
   'claude.ai':              { tool: 'Claude',        provider: 'Anthropic',   category: 'TEXT_GEN' },
   'gemini.google.com':      { tool: 'Gemini',        provider: 'Google',      category: 'TEXT_GEN' },
+  'gemini.google':          { tool: 'Gemini',        provider: 'Google',      category: 'TEXT_GEN' },
   'aistudio.google.com':    { tool: 'AI Studio',     provider: 'Google',      category: 'TEXT_GEN' },
   'midjourney.com':         { tool: 'Midjourney',    provider: 'Midjourney',  category: 'IMAGE_GEN' },
   'perplexity.ai':          { tool: 'Perplexity',    provider: 'Perplexity',  category: 'RESEARCH' },
@@ -142,20 +143,21 @@ async function stopTracking(reason = 'manual') {
 
 async function syncQueue() {
   const [apiKey, apiBase] = await Promise.all([getApiKey(), getApiBase()])
-  if (!apiKey) return
+  if (!apiKey) return { ok: false, error: 'no_api_key' }
 
   const queue = await getQueue()
   if (queue.length === 0) {
     await updateTodayCache()
-    return
+    return { ok: true }
   }
 
   const successIndices = []
+  let lastError = null
 
   for (let i = 0; i < queue.length; i++) {
     const entry = queue[i]
     if ((entry.retries ?? 0) >= MAX_RETRIES) {
-      successIndices.push(i)  // Drop after max retries
+      successIndices.push(i)
       continue
     }
 
@@ -169,7 +171,7 @@ async function syncQueue() {
         },
         body: JSON.stringify({
           tool: entry.tool,
-          model: entry.model,
+          model: entry.model ?? null,
           feature: entry.feature,
           durationSeconds: entry.durationSeconds,
           sessionId: entry.sessionId,
@@ -182,12 +184,19 @@ async function syncQueue() {
       } else if (res.status === 401) {
         await chrome.storage.sync.set({ connected: false, lastError: 'invalid_api_key' })
         setBadge('!', '#ef4444')
-        return
+        return { ok: false, error: 'invalid_api_key' }
       } else {
         queue[i].retries = (queue[i].retries ?? 0) + 1
+        try {
+          const data = await res.json()
+          lastError = data.error || `HTTP ${res.status}`
+        } catch {
+          lastError = `HTTP ${res.status}`
+        }
       }
-    } catch {
+    } catch (e) {
       queue[i].retries = (queue[i].retries ?? 0) + 1
+      lastError = (e && e.message) ? String(e.message) : 'Network error'
     }
   }
 
@@ -199,6 +208,8 @@ async function syncQueue() {
   }
 
   await updateTodayCache()
+  if (lastError) return { ok: false, error: lastError }
+  return { ok: true }
 }
 
 async function updateTodayCache() {
@@ -284,7 +295,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 
 // ─── Content Script Messages ──────────────────────────────────────────────────
 
-chrome.runtime.onMessage.addListener((message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'MODEL_CHANGED' && activeTab?.id === sender.tab?.id) {
     activeTab.model = message.model
   }
@@ -293,6 +304,21 @@ chrome.runtime.onMessage.addListener((message, sender) => {
   }
   if (message.type === 'GET_STATUS') {
     return true  // async response
+  }
+  if (message.type === 'SYNC_NOW') {
+    ;(async () => {
+      try {
+        const result = await syncQueue()
+        if (result && result.ok) {
+          sendResponse({ success: true })
+        } else {
+          sendResponse({ success: false, error: (result && result.error) || 'Sync failed' })
+        }
+      } catch (err) {
+        sendResponse({ success: false, error: (err && err.message) ? String(err.message) : 'Sync failed' })
+      }
+    })()
+    return true  // keep channel open for async sendResponse
   }
   if (message.type === 'VERIFY_KEY') {
     verifyApiKey(message.apiKey).then((valid) => {
@@ -311,7 +337,7 @@ chrome.alarms.create(SYNC_ALARM, { periodInMinutes: SYNC_INTERVAL_MINUTES })
 chrome.idle.setDetectionInterval(IDLE_THRESHOLD_SECONDS)
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name === SYNC_ALARM) await syncQueue()
+  if (alarm.name === SYNC_ALARM || alarm.name === 'syncNow') await syncQueue()
 })
 
 // ─── Install / Startup ────────────────────────────────────────────────────────

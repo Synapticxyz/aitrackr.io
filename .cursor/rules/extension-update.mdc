@@ -1,0 +1,21 @@
+---
+description: When updating the Chrome extension, always bump version and pack for the web
+alwaysApply: true
+---
+
+# Extension update workflow
+
+When you change any file under `extension/` (e.g. background.js, content.js, popup.js, options.js, manifest.json):
+
+1. **Bump the extension version**  
+   Run `npm run extension:version` (patch), or `npm run extension:version:minor` / `npm run extension:version:major` as appropriate. This updates `extension/manifest.json`.
+
+2. **Pack for the web**  
+   Run `npm run extension:pack`. This:
+   - Builds the zip in `extension/dist/aitrackr-extension-vX.Y.Z.zip`
+   - Copies the zip to `public/extension/` (versioned + `aitrackr-extension-latest.zip`)
+   - Writes `public/extension/version.json` so the dashboard download link and version label stay correct.
+
+Alternatively use `npm run extension:build` to do both (bump patch + pack) in one step.
+
+Never leave the extension updated in source without bumping the version and running pack — otherwise the dashboard will serve an old zip and show an old version number.

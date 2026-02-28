@@ -84,12 +84,12 @@ export default function ExtensionPage() {
             Until this changes, the extension is distributed directly from this site — same code, same privacy guarantees, just a manual install.
           </p>
           <a
-            href="/extension/aitrackr-extension-v1.0.0.zip"
+            href="/extension/aitrackr-extension-latest.zip"
             download
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-black font-mono font-bold text-sm hover:brightness-110 transition-all"
           >
             <Download className="h-4 w-4" />
-            DOWNLOAD_EXTENSION_v1.0.0
+            {versionData ? `DOWNLOAD_EXTENSION_v${versionData.latestVersion}` : 'DOWNLOAD_EXTENSION'}
           </a>
         </div>
       </div>
@@ -207,12 +207,12 @@ export default function ExtensionPage() {
                 </div>
               </div>
               <a
-                href="/extension/aitrackr-extension-v1.0.0.zip"
+                href="/extension/aitrackr-extension-latest.zip"
                 download
                 className="flex items-center gap-2 px-3 py-2 border border-amber-500/30 text-amber-500 text-xs font-mono hover:bg-amber-500/10 transition-all"
               >
                 <Download className="h-3.5 w-3.5" />
-                DOWNLOAD_LATEST
+                DOWNLOAD_LATEST{versionData ? ` (v${versionData.latestVersion})` : ''}
               </a>
             </div>
 

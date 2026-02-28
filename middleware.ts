@@ -90,8 +90,9 @@ export default auth((req: NextRequest & { auth: unknown }) => {
   return response
 })
 
+// Exclude /api/usage so extension API-key auth is never blocked by session middleware
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/usage(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

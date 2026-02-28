@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Mock Prisma
 vi.mock('@/lib/prisma', () => ({
   prisma: {
+    user: { findUnique: vi.fn() },
     subscription: { findMany: vi.fn() },
     usageLog: { findMany: vi.fn() },
     overlapAlert: { deleteMany: vi.fn(), createMany: vi.fn() },
@@ -36,6 +37,7 @@ const mockSubscriptions = [
 describe('Overlap Detector', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(prisma.user.findUnique).mockResolvedValue({ currency: 'EUR' } as never)
   })
 
   it('detects duplicate capabilities', async () => {
