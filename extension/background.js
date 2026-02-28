@@ -340,13 +340,26 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === SYNC_ALARM || alarm.name === 'syncNow') await syncQueue()
 })
 
+// ─── Migrate stale storage ────────────────────────────────────────────────────
+// If a localhost/127.0.0.1 apiBase was saved from a previous dev build, clear it
+// so the extension falls back to DEFAULT_API_BASE (production URL).
+async function migrateStorage() {
+  const r = await chrome.storage.sync.get('apiBase')
+  if (r.apiBase && (r.apiBase.includes('localhost') || r.apiBase.includes('127.0.0.1'))) {
+    await chrome.storage.sync.remove('apiBase')
+    console.log('[AiTrackr] Cleared stale localhost apiBase, using default:', DEFAULT_API_BASE)
+  }
+}
+
 // ─── Install / Startup ────────────────────────────────────────────────────────
 
 chrome.runtime.onInstalled.addListener(async () => {
+  await migrateStorage()
   chrome.alarms.create(SYNC_ALARM, { periodInMinutes: SYNC_INTERVAL_MINUTES })
   console.log('[AiTrackr] Installed. Tracking 18 AI tools. Sync every 5 min.')
 })
 
 chrome.runtime.onStartup.addListener(async () => {
+  await migrateStorage()
   await syncQueue()
 })
