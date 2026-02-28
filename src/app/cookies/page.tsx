@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Activity } from 'lucide-react'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy — AiTrackr',
@@ -76,11 +76,8 @@ export default function CookiesPage() {
     <div className="min-h-screen bg-[#0A0A0A] text-white grid-bg">
       {/* Nav */}
       <nav className="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-white flex items-center justify-center">
-            <Activity className="h-4 w-4 text-black" />
-          </div>
-          <span className="font-mono font-bold text-white">AiTrackr</span>
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="AiTrackr" width={140} height={32} className="h-8 w-auto object-contain" />
         </Link>
         <div className="flex items-center gap-4 text-xs font-mono text-gray-500">
           <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>

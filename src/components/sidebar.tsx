@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
-import { Activity, LayoutDashboard, CreditCard, BarChart3, Puzzle, Settings, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
+import { LayoutDashboard, CreditCard, BarChart3, Puzzle, Settings, ShieldCheck } from 'lucide-react'
 
 const navItems = [
   { href: '/dashboard', label: 'DASHBOARD', icon: LayoutDashboard },
@@ -22,11 +23,8 @@ export function Sidebar() {
   return (
     <aside className="w-60 flex-shrink-0 border-r border-white/10 bg-black h-full flex flex-col">
       <div className="p-5 border-b border-white/10">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-white flex items-center justify-center">
-            <Activity className="h-4 w-4 text-black" />
-          </div>
-          <span className="font-mono font-bold text-white tracking-tight">AiTrackr</span>
+        <Link href="/dashboard" className="flex items-center">
+          <Image src="/logo.png" alt="AiTrackr" width={140} height={32} className="h-8 w-auto object-contain" priority />
         </Link>
       </div>
 

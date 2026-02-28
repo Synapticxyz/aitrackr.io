@@ -7,6 +7,7 @@ import { formatMoney } from '@/lib/currencies'
 import { Banknote, Clock, AlertTriangle, Activity, Zap } from 'lucide-react'
 import { startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns'
 import { RealtimeTracker } from './_components/realtime-tracker'
+import { RunAnalysisButton } from './_components/run-analysis-button'
 
 export const metadata = { title: 'Dashboard' }
 
@@ -43,10 +44,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-xs font-mono text-gray-500">// OVERVIEW</p>
-        <h1 className="text-2xl font-bold font-mono text-white mt-1">DASHBOARD</h1>
-        <p className="text-sm text-gray-400 font-mono">Welcome back, {session.user.name?.split(' ')[0] ?? 'there'}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-mono text-gray-500">// OVERVIEW</p>
+          <h1 className="text-2xl font-bold font-mono text-white mt-1">DASHBOARD</h1>
+          <p className="text-sm text-gray-400 font-mono">Welcome back, {session.user.name?.split(' ')[0] ?? 'there'}</p>
+        </div>
+        <RunAnalysisButton />
       </div>
 
       {alerts.length > 0 && (

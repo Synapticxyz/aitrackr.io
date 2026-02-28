@@ -10,7 +10,8 @@ import { signInSchema, type SignInInput } from '@/lib/validations'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import { Activity, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 
 function SignInForm() {
   const router = useRouter()
@@ -38,11 +39,8 @@ function SignInForm() {
     <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A] p-4 grid-bg">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 mb-8 justify-center">
-          <div className="w-8 h-8 bg-white flex items-center justify-center">
-            <Activity className="w-5 h-5 text-black" />
-          </div>
-          <span className="font-mono font-bold text-xl text-white">AiTrackr</span>
+        <div className="flex items-center justify-center mb-8">
+          <Image src="/logo.png" alt="AiTrackr" width={180} height={40} className="h-10 w-auto object-contain" />
         </div>
 
         <div className="border border-white/10 bg-[#111111] p-8">

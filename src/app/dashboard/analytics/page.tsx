@@ -41,9 +41,39 @@ export default function AnalyticsPage() {
   useEffect(() => { load(period) }, [period])
 
   function exportCsv() {
-    const rows = usageByTool.map((u) => `${u.tool},${u.seconds},${Math.round(u.seconds / 60)}`)
-    const csv = ['Tool,Seconds,Minutes', ...rows].join('\n')
-    const blob = new Blob([csv], { type: 'text/csv' })
+    const totalSeconds = usageByTool.reduce((s, u) => s + u.seconds, 0)
+    const fmtTime = (s: number) => {
+      const h = Math.floor(s / 3600)
+      const m = Math.floor((s % 3600) / 60)
+      return h > 0 ? `${h}h ${m}m` : `${m}m`
+    }
+
+    const lines: string[] = []
+    lines.push('AiTrackr Usage Report')
+    lines.push(`Period,Last ${period} days`)
+    lines.push(`Exported,${new Date().toLocaleDateString('en-GB')}`)
+    lines.push('')
+    lines.push('Tool,Hours,Minutes,Seconds,Share')
+    for (const u of usageByTool) {
+      const h = Math.floor(u.seconds / 3600)
+      const m = Math.floor((u.seconds % 3600) / 60)
+      const pct = totalSeconds > 0 ? ((u.seconds / totalSeconds) * 100).toFixed(1) + '%' : '0%'
+      lines.push(`${u.tool},${h},${m},${u.seconds},${pct}`)
+    }
+    lines.push('')
+    lines.push(`Total,${Math.floor(totalSeconds / 3600)},${Math.floor((totalSeconds % 3600) / 60)},${totalSeconds},100%`)
+
+    if (usageByDate.length > 0) {
+      lines.push('')
+      lines.push('Daily Breakdown')
+      lines.push('Date,Minutes,Duration')
+      for (const d of usageByDate) {
+        lines.push(`${d.date},${d.minutes},${fmtTime(d.minutes * 60)}`)
+      }
+    }
+
+    const csv = lines.join('\n')
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a'); a.href = url; a.download = `aitrackr-usage-${period}days.csv`; a.click()
   }
@@ -119,7 +149,9 @@ export default function AnalyticsPage() {
                   </Pie>
                   <Tooltip
                     formatter={(v: number | undefined) => [formatDuration(v ?? 0), 'Duration']}
-                    contentStyle={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'monospace', fontSize: 11 }}
+                    contentStyle={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'monospace', fontSize: 11, color: '#fff' }}
+                    itemStyle={{ color: '#d4d4d4' }}
+                    labelStyle={{ color: '#f5f5f5' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -143,7 +175,7 @@ export default function AnalyticsPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#6b7280', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 10, fill: '#6b7280', fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'monospace', fontSize: 11 }} />
+                  <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'monospace', fontSize: 11, color: '#fff' }} itemStyle={{ color: '#d4d4d4' }} labelStyle={{ color: '#f5f5f5' }} />
                   <Bar dataKey="minutes" fill="#F59E0B" radius={[0, 0, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>

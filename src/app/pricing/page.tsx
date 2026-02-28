@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Check, Activity } from 'lucide-react'
+import Image from 'next/image'
+import { Check } from 'lucide-react'
 import { CheckoutButton } from './_checkout-button'
 
 export const metadata: Metadata = {
@@ -31,11 +32,8 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white grid-bg">
       <nav className="border-b border-white/10 px-6 py-4 flex items-center justify-between max-w-5xl mx-auto">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-white flex items-center justify-center">
-            <Activity className="h-4 w-4 text-black" />
-          </div>
-          <span className="font-mono font-bold text-white">AiTrackr</span>
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="AiTrackr" width={140} height={32} className="h-8 w-auto object-contain" />
         </Link>
         <Link href="/auth/signin" className="text-xs font-mono text-gray-400 hover:text-white transition-colors border border-white/10 px-3 py-2 hover:border-white/20">
           SIGN_IN

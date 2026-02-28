@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import NextImage from 'next/image'
 import {
   ArrowRight, Shield, Lock, MessageSquare, Image, Sparkles,
   Clock, Copy, Calculator, Bell, FileText, Download, Activity, Scissors, Check,
@@ -413,10 +414,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 bg-white flex items-center justify-center">
-                <Activity className="w-4 h-4 text-black" />
-              </div>
-              <span className="font-mono font-bold text-white">AiTrackr</span>
+              <NextImage src="/logo.png" alt="AiTrackr" width={120} height={28} className="h-7 w-auto object-contain" />
               <span className="text-gray-600 text-sm font-mono">© 2026</span>
             </div>
 

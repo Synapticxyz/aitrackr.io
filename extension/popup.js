@@ -236,14 +236,24 @@ async function getApiBase() {
 const manifest = chrome.runtime.getManifest()
 versionLabel.textContent = `v${manifest.version}`
 
+function isNewerVersion(latest, current) {
+  const a = latest.split('.').map(Number)
+  const b = current.split('.').map(Number)
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    if ((a[i] ?? 0) > (b[i] ?? 0)) return true
+    if ((a[i] ?? 0) < (b[i] ?? 0)) return false
+  }
+  return false
+}
+
 async function checkVersion() {
   try {
     const apiBase = await getApiBase()
     const res = await fetch(`${apiBase}/api/extension/version`)
     if (!res.ok) return
     const data = await res.json()
-    if (data.latestVersion && data.latestVersion > manifest.version) {
-      updateNotice.innerHTML = `<a href="${data.updateUrl}" class="update-link" target="_blank">Update available ↗</a>`
+    if (data.latestVersion && isNewerVersion(data.latestVersion, manifest.version)) {
+      updateNotice.innerHTML = `<a href="${data.updateUrl}" class="update-link" target="_blank">Update available (v${data.latestVersion}) ↗</a>`
     }
   } catch { /* non-blocking */ }
 }
